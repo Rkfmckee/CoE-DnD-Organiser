@@ -1,13 +1,16 @@
 # Overview
-Project name: D&D Organiser.
-Author: Ryan McKeever.
 This application is part of Unosquare's Center of Excellence software project.
+- Project name: D&D Organiser.
+- Author: Ryan McKeever.
 
 ## Definitions
 - ```Game master``` is the person who organises and runs games of Dungeons and Dragons. This is who this application is intended for.
 - ```Player``` is anyone else who plays in the games created and run by the Game master.
 - ```Campaign``` is a set of content used to flavour the experience of each game.
 - ```Game``` is a collection of players running a set campaign, organised by a single Game master.
+- ```Character``` can be split up into two different types:
+    - ```Player Character (PC)```. These are how the Players interact with the game.
+    - ```Non-Player Character (NPC)```. These are how the Game master interacts with the Players within the game.
 
 # Project specifications
 ## The Problem
@@ -28,3 +31,5 @@ The Game master should be able to;
 - Track details of individual games.
 - Keep personal notes on individual games.
 - Track statistics of all games, campaigns and players.
+- Create characters categorized either as PC or NPC.
+- Assign a character to a player or themselves, as appropriate.

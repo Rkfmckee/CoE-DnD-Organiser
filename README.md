@@ -4,16 +4,16 @@ This application is part of Unosquare's Center of Excellence software project.
 - Author: Ryan McKeever.
 
 ## Definitions
-- ```Game master``` is the person who organises and runs games of Dungeons and Dragons. This is who this application is intended for.
-- ```Player``` is anyone else who plays in the games created and run by the Game master.
-- ```Campaign``` is a set of content used to flavour the experience of each game.
-- ```Game``` is a collection of players running a set campaign, organised by a single Game master.
-- ```Character``` can be split up into two different types:
-    - ```Player Character (PC)``` is created by the player and used by them to interact with the game.
-    - ```Non-Player Character (NPC)``` is created by the Game master and used by them to interact with the players within the game.
+- `Game master` is the person who organises and runs games of Dungeons and Dragons. This is who this application is intended for.
+- `Player` is anyone else who plays in the games created and run by the Game master.
+- `Campaign` is a set of content used to flavour the experience of each game.
+- `Game` is a collection of players running a set campaign, organised by a single Game master.
+- `Character` can be split up into two different types:
+    - `Player Character (PC)` is created by the player and used by them to interact with the game.
+    - `Non-Player Character (NPC)` is created by the Game master and used by them to interact with the players within the game.
 
 # Project specifications
-## The Problem
+## The problem
 When running a game like Dungeons & Dragons, it can be difficult for the Game master to keep track of the details of all their games.
 Each Game master can have multiple players across many campaigns. Players can be in multiple games run by the same Game master. The Game master might even want to track similarities between their games, such as when they started, how long they have lasted, how often they're played or similar content between thier games.
 
@@ -39,3 +39,18 @@ In this case, the Game master should also be able to;
 - Track statistics of all games, campaigns and players.
 - Create characters categorized either as PC or NPC.
 - Assign a character to a player or themselves, as appropriate.
+
+# Domain model diagram
+This diagram outlines the main domains for the application, along with the direction and a description of their interactions.
+![Domain model diagram](Domain_model_diagram.png)
+
+This diagram was created using Mermaid with the following markdown.
+```
+flowchart
+    GameMaster -->|Creates| Game
+    GameMaster -->|Plays| Character
+    GameMaster --> |Writes| Campaign
+    Player -->|Plays| Character
+    Campaign --> |Themes| Game
+    Character -->|Exists within| Game
+```

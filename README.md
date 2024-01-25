@@ -51,3 +51,72 @@ flowchart
     Campaign --> |Themes| Game
     Character -->|Exists within| Game
 ```
+
+# Entity relationship diagram
+This diagram outlines all the tables within the application's database, and the relationships between them.
+``` mermaid
+erDiagram 
+
+game_masters ||--o{ games : ""
+game_masters ||--o{ campaigns : ""
+game_masters ||--|{ characters : ""
+players ||--|{ characters : ""
+campaigns ||--|{ games : ""
+characters ||--|{ game_characters : ""
+games ||--|{ game_characters : ""
+
+game_masters 
+{
+    serial id PK
+    varchar email_address
+    varchar user_name
+    varchar password
+    date date_of_birth
+    timestamp created
+}
+
+players 
+{
+    serial id PK
+    varchar name
+    timestamp created
+}
+
+games 
+{
+    serial id PK
+    varchar game_details
+    timestamp created
+    int game_master_id FK
+    int campaign_id FK
+}
+
+campaigns 
+{
+    serial id PK
+    varchar name
+    varchar theme
+    varchar setting_details
+    timestamp created
+    int writer_id FK
+}
+
+characters 
+{
+    serial id PK
+    varchar name
+    varchar level
+    varchar race
+    varchar class
+    varchar subclass
+    timestamp created
+    int player_id FK
+}
+
+game_characters 
+{
+    serial id PK
+    int game_id FK
+    int character_id FK
+}
+```

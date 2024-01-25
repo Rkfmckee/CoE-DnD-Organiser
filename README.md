@@ -42,9 +42,6 @@ In this case, the Game master should also be able to;
 
 # Domain model diagram
 This diagram outlines the main domains for the application, along with the direction and a description of their interactions.
-![Domain model diagram](Domain_model_diagram.png)
-
-This diagram was created using Mermaid with the following markdown.
 ``` mermaid
 flowchart
     GameMaster -->|Creates| Game

@@ -97,19 +97,17 @@ campaigns
     serial id PK
     varchar name
     varchar theme
-    varchar setting_details
-    timestamp created
+    varchar details
     varchar writer
+    timestamp created
 }
 
 characters 
 {
     serial id PK
     varchar name
-    varchar level
     varchar race
-    varchar class
-    varchar subclass
+    varchar class_levels
     timestamp created
     int player_id FK
 }

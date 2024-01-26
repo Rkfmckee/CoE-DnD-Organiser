@@ -44,12 +44,12 @@ In this case, the Game master should also be able to;
 This diagram outlines the main domains for the application, along with the direction and a description of their interactions.
 ``` mermaid
 flowchart
-    GameMaster -->|Creates| Game
-    GameMaster -->|Plays| Character
+    GameMaster --> |Creates| Game
+    GameMaster --> |Plays| Character
     GameMaster --> |Writes| Campaign
-    Player -->|Plays| Character
+    Player --> |Plays| Character
     Campaign --> |Themes| Game
-    Character -->|Exists within| Game
+    Character --> |Exists within| Game
 ```
 
 # Entity relationship diagram
@@ -58,9 +58,8 @@ This diagram outlines all the tables within the application's database, and the 
 erDiagram 
 
 game_masters ||--o{ games : ""
-game_masters ||--o{ campaigns : ""
-game_masters ||--|{ characters : ""
 players ||--|{ characters : ""
+players ||--|o game_masters : ""
 campaigns ||--|{ games : ""
 characters ||--|{ game_characters : ""
 games ||--|{ game_characters : ""
@@ -68,24 +67,26 @@ games ||--|{ game_characters : ""
 game_masters 
 {
     serial id PK
-    varchar email_address
-    varchar user_name
-    varchar password
-    date date_of_birth
+    varchar planning_notes
     timestamp created
+    int player_id FK
 }
 
 players 
 {
     serial id PK
+    varchar email_address
+    varchar user_name
+    varchar password
     varchar name
+    date date_of_birth
     timestamp created
 }
 
 games 
 {
     serial id PK
-    varchar game_details
+    varchar details
     timestamp created
     int game_master_id FK
     int campaign_id FK
@@ -98,7 +99,7 @@ campaigns
     varchar theme
     varchar setting_details
     timestamp created
-    int writer_id FK
+    varchar writer
 }
 
 characters 

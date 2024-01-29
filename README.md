@@ -550,3 +550,10 @@ game_characters
 ```
 
 **Response** `201 Created`
+
+<hr>
+<br>
+
+`DELETE /games/{id}/characters{id}` Remove a character from a game.
+
+**Response** `204 No Content`

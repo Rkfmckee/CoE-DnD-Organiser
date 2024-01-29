@@ -76,7 +76,6 @@ players
 {
     serial id PK
     varchar email_address
-    varchar user_name
     varchar password
     varchar name
     date date_of_birth
@@ -119,3 +118,147 @@ game_characters
     int character_id FK
 }
 ```
+
+# API Specification
+## Players
+`GET /players` Return a list of all players.
+
+**Response** `200 Ok`
+```
+[
+    {
+        "id": "1",
+        "email_address": "john.smith@dnd.com",
+        "name": "John Smith",
+        "date_of_birth": "1990-01-01",
+        "created": "2024-01-29 11:29:00.00"
+    },
+    {
+        "id": "2",
+        "email_address": "jane.doe@dnd.com",
+        "name": "Jane Doe",
+        "date_of_birth": "1990-01-02",
+        "created": "2024-01-29 11:30:00.00"
+    },
+    {
+        "id": "3",
+        "email_address": "ryan.mck@dnd.com",
+        "name": "Ryan McK",
+        "date_of_birth": "1990-01-03",
+        "created": "2024-01-29 11:31:00.00"
+    }
+]
+```
+<hr>
+<br>
+
+`GET /players/{id}` Return a player with the corresponding id.
+
+**Response** `200 Ok`
+```
+{
+    "id": "1",
+    "email_address": "john.smith@dnd.com",
+    "name": "John Smith",
+    "date_of_birth": "1990-01-01",
+    "created": "2024-01-29 11:29:00.00"
+}
+```
+
+<hr>
+<br>
+
+`POST /players/{id}` Create a player.
+
+**Request**
+```
+{
+    "email_address": "joe.bloggs@dnd.com",
+    "name": "Joe Bloggs",
+    "date_of_birth": "1990-01-04",
+    "password": "password123",
+    "is_game_master": "false"
+}
+```
+
+**Response** `201 Created`
+
+<hr>
+<br>
+
+`PUT /players/{id}` Update a player.
+
+**Request**
+```
+{
+    "email_address": "john.smith@dnd.com",
+    "name": "John Smith",
+    "date_of_birth": "1990-01-01",
+    "password": "password123",
+}
+```
+
+**Response** `200 Ok`
+
+<hr>
+<br>
+
+`DELETE /players/{id}` Delete a player.
+
+**Response** `204 No Content`
+
+<hr>
+<br>
+
+## Game masters
+`GET /game-masters` Return a list of all game masters.
+
+**Response** `200 Ok`
+```
+[
+    {
+        "id": "3",
+        "name": "Ryan McK",
+        "planning_notes": "Last session..."
+        "created": "2024-01-29 11:31:00.00"
+    }
+]
+```
+<hr>
+<br>
+
+`GET /game-masters/{id}` Return a game master with the corresponding id.
+
+**Response** `200 Ok`
+```
+{
+    "id": "3",
+    "name": "Ryan McK",
+    "planning_notes": "Last session..."
+    "created": "2024-01-29 11:31:00.00"
+}
+```
+
+<hr>
+<br>
+
+`PUT /game-masters/{id}` Update a game master.
+
+**Request**
+```
+{
+    "planning_notes": "In the new session...",
+},
+```
+
+**Response** `200 Ok`
+
+<hr>
+<br>
+
+`DELETE /game-masters/{id}` Delete a game master.
+
+**Response** `204 No Content`
+
+<hr>
+<br>

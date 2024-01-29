@@ -1,5 +1,5 @@
 # Overview
-This application is part of Unosquare's Center of Excellence software project.
+This application is part of Unosquare"s Center of Excellence software project.
 - Project name: D&D Organiser.
 - Author: Ryan McKeever.
 
@@ -15,11 +15,11 @@ This application is part of Unosquare's Center of Excellence software project.
 # Project specifications
 ## The problem
 When running a game like Dungeons & Dragons, it can be difficult for the Game master to keep track of the details of all their games.
-Each Game master can have multiple players across many campaigns. Players can be in multiple games run by the same Game master. The Game master might even want to track similarities between their games, such as when they started, how long they have lasted, how often they're played or similar content between thier games.
+Each Game master can have multiple players across many campaigns. Players can be in multiple games run by the same Game master. The Game master might even want to track similarities between their games, such as when they started, how long they have lasted, how often they"re played or similar content between thier games.
 
 ### Why does the problem need solved?
-If the Game master's time can be taken away from having to organise their games, then more time can be spent adding more fun content to the games.
-Increasing the enjoyment Game master's get from their games can also reflect on the player's experience, helping them enjoy their time playing more.
+If the Game master"s time can be taken away from having to organise their games, then more time can be spent adding more fun content to the games.
+Increasing the enjoyment Game master"s get from their games can also reflect on the player"s experience, helping them enjoy their time playing more.
 Fun is the whole point, after all.
 
 # How will this be achieved?
@@ -53,7 +53,7 @@ flowchart
 ```
 
 # Entity relationship diagram
-This diagram outlines all the tables within the application's database, and the relationships between them.
+This diagram outlines all the tables within the application"s database, and the relationships between them.
 ``` mermaid
 erDiagram 
 
@@ -242,13 +242,27 @@ game_characters
 <hr>
 <br>
 
+`POST /game-masters/{id}` Create a game master.
+
+**Request**
+```
+{
+    "planning_notes": "Last session..."
+}
+```
+
+**Response** `201 Created`
+
+<hr>
+<br>
+
 `PUT /game-masters/{id}` Update a game master.
 
 **Request**
 ```
 {
-    "planning_notes": "In the new session...",
-},
+    "planning_notes": "In the new session..."
+}
 ```
 
 **Response** `200 Ok`
@@ -262,3 +276,277 @@ game_characters
 
 <hr>
 <br>
+
+## Campaigns
+`GET /campaigns` Return a list of all campaigns.
+
+**Response** `200 Ok`
+```
+[
+    {
+        "id": "1",
+        "name": "Waterdeep: Dragon Heist",
+		"theme": "Fantasy",
+		"details": "Levels 1 - 5, set in the city of Waterdeep.",
+		"writer": "Christopher Perkins",
+        "created": "2024-01-29 10:00:00.00"
+    }
+]
+```
+<hr>
+<br>
+
+`GET /campaigns/{id}` Return a campaign with the corresponding id.
+
+**Response** `200 Ok`
+```
+{
+    "id": "1",
+    "name": "Waterdeep: Dragon Heist",
+    "theme": "Fantasy",
+    "details": "Levels 1 - 5, set in the city of Waterdeep.",
+    "writer": "Christopher Perkins",
+    "created": "2024-01-29 10:00:00.00"
+}
+```
+
+<hr>
+<br>
+
+`POST /campaigns/{id}` Create a campaign.
+
+**Request**
+```
+{
+    "name": "Tales from the Yawning Portal",
+    "theme": "Fantasy",
+    "details": "Visit the famous Yawning Portal tavern.",
+    "writer": "Mike Mearls"
+}
+```
+
+**Response** `201 Created`
+
+<hr>
+<br>
+
+`PUT /campaigns/{id}` Update a campaign.
+
+**Request**
+```
+{
+    "name": "Tales from the Yawning Portal",
+    "theme": "Fantasy",
+    "details": "Visit the famous Yawning Portal tavern, in Waterdeep!",
+    "writer": "Mike Mearls"
+}
+```
+
+**Response** `200 Ok`
+
+<hr>
+<br>
+
+`DELETE /campaigns/{id}` Delete a campaign.
+
+**Response** `204 No Content`
+
+<hr>
+<br>
+
+## Characters
+`GET /characters` Return a list of all characters.
+
+**Response** `200 Ok`
+```
+[
+    {
+        "id": "1",
+        "name": "Raymel the Wizard",
+		"race": "High Elf",
+		"class_levels": "12 Wizard (Bladesinging)",
+        "created": "2024-01-29 11:40:00.00",
+        "player_id": "1"
+    },
+    {
+        "id": "2",
+        "name": "Timbr",
+		"race": "Warforged",
+		"class_levels": "17 Artificer",
+        "created": "2024-01-29 11:41:00.00",
+        "player_id": "3"
+    }
+]
+```
+<hr>
+<br>
+
+`GET /characters/{id}` Return a character with the corresponding id.
+
+**Response** `200 Ok`
+```
+{
+    "id": "2",
+    "name": "Timbr",
+    "race": "Warforged",
+    "class_levels": "17 Artificer",
+    "created": "2024-01-29 11:41:00.00",
+    "player_id": "3"
+}
+```
+
+<hr>
+<br>
+
+`POST /characters/{id}` Create a character.
+
+**Request**
+```
+{
+    "name": "Rhondana",
+    "race": "Lizardfolk",
+    "class_levels": "12 Druid (Circle of the Moon)",
+    "player_id": "2"
+}
+```
+
+**Response** `201 Created`
+
+<hr>
+<br>
+
+`PUT /characters/{id}` Update a character.
+
+**Request**
+```
+{
+    "name": "Rhondana",
+    "race": "Lizardfolk",
+    "class_levels": "12 Druid (Circle of the Moon)"
+}
+```
+
+**Response** `200 Ok`
+
+<hr>
+<br>
+
+`DELETE /characters/{id}` Delete a character.
+
+**Response** `204 No Content`
+
+<hr>
+<br>
+
+## Games
+`GET /games` Return a list of all games.
+
+**Response** `200 Ok`
+```
+[
+    {
+        "id": "1",
+        "details": "A homebrew game based on Waterdeep: Dragon Heist.",
+        "created": "2024-01-29 11:50:00.00",
+        "game_master_id": "3",
+        "campaign_id": "1"
+    }
+]
+```
+<hr>
+<br>
+
+`GET /games/{id}` Return a game with the corresponding id.
+
+**Response** `200 Ok`
+```
+{
+    "id": "1",
+    "details": "A homebrew game based on Waterdeep: Dragon Heist.",
+    "created": "2024-01-29 11:50:00.00",
+    "game_master_id": "3",
+    "campaign_id": "1"
+}
+```
+
+<hr>
+<br>
+
+`POST /games/{id}` Create a game.
+
+**Request**
+```
+{
+    "details": "Started playing one campaign, then transitioned into another.",
+    "game_master_id": "3",
+    "campaign_id": "2"
+}
+```
+
+**Response** `201 Created`
+
+<hr>
+<br>
+
+`PUT /games/{id}` Update a game.
+
+**Request**
+```
+{
+    "details": "Started playing one campaign, then transitioned into another, then another.",
+    "game_master_id": "3",
+    "campaign_id": "2"
+}
+```
+
+**Response** `200 Ok`
+
+<hr>
+<br>
+
+`DELETE /games/{id}` Delete a game.
+
+**Response** `204 No Content`
+
+<hr>
+<br>
+
+## Game characters
+`GET /games/{id}/characters` Return a list of all characters in the game with the corresponding id.
+
+**Response** `200 Ok`
+```
+[
+    {
+        "character_id": "1",
+        "name": "Raymel the Wizard",
+        "race": "High Elf",
+        "class_levels": "12 Wizard (Bladesinging)",
+        "player_name": "John Smith"
+    },
+    {
+        "character_id": "2",
+        "name": "Timbr",
+        "race": "Warforged",
+        "class_levels": "17 Artificer",
+        "player_name": "Ryan McK"
+    }
+]
+```
+
+<hr>
+<br>
+
+`POST /games/{id}/characters{id}` Add a character to a game.
+
+**Request**
+```
+[
+    {
+        "game_id": "1",
+        "character_id": "3"
+    }
+]
+```
+
+**Response** `201 Created`

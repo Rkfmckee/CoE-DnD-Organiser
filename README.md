@@ -1,5 +1,5 @@
 # Overview
-This application is part of Unosquare"s Center of Excellence software project.
+This application is part of Unosquare's Center of Excellence software project.
 - Project name: D&D Organiser.
 - Author: Ryan McKeever.
 
@@ -15,11 +15,11 @@ This application is part of Unosquare"s Center of Excellence software project.
 # Project specifications
 ## The problem
 When running a game like Dungeons & Dragons, it can be difficult for the Game master to keep track of the details of all their games.
-Each Game master can have multiple players across many campaigns. Players can be in multiple games run by the same Game master. The Game master might even want to track similarities between their games, such as when they started, how long they have lasted, how often they"re played or similar content between thier games.
+Each Game master can have multiple players across many campaigns. Players can be in multiple games run by the same Game master. The Game master might even want to track similarities between their games, such as when they started, how long they have lasted, how often they're played or similar content between thier games.
 
 ### Why does the problem need solved?
-If the Game master"s time can be taken away from having to organise their games, then more time can be spent adding more fun content to the games.
-Increasing the enjoyment Game master"s get from their games can also reflect on the player"s experience, helping them enjoy their time playing more.
+If the Game master's time can be taken away from having to organise their games, then more time can be spent adding more fun content to the games.
+Increasing the enjoyment Game master's get from their games can also reflect on the player's experience, helping them enjoy their time playing more.
 Fun is the whole point, after all.
 
 # How will this be achieved?
@@ -53,7 +53,7 @@ flowchart
 ```
 
 # Entity relationship diagram
-This diagram outlines all the tables within the application"s database, and the relationships between them.
+This diagram outlines all the tables within the application's database, and the relationships between them.
 ``` mermaid
 erDiagram 
 

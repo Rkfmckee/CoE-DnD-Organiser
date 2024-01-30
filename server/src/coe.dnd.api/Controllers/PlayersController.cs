@@ -1,3 +1,5 @@
+using System.Net;
+using coe.dnd.api.ViewModels.Players;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coe.dnd.api.Controllers;
@@ -7,14 +9,37 @@ namespace coe.dnd.api.Controllers;
 public class PlayersController : Controller
 {
     [HttpGet]
-    public IActionResult Index()
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public IActionResult GetPlayers()
     {
         return Ok();
     }
 
-    [HttpGet("{id}", Name = "GetById")]
-    public IActionResult GetById(int id)
+    [HttpGet("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public IActionResult GetPlayerById(int id)
     {
         return Ok();
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(CreatePlayerViewModel), (int)HttpStatusCode.Created)]
+    public IActionResult CreatePlayer(CreatePlayerViewModel playerDetails)
+    {
+        return Created();
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(UpdatePlayerViewModel), (int)HttpStatusCode.OK)]
+    public IActionResult UpdatePlayer(int id, UpdatePlayerViewModel playerDetails)
+    {
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public IActionResult DeletePlayer(int id)
+    {
+        return NoContent();
     }
 }

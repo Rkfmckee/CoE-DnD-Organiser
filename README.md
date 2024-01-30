@@ -168,7 +168,7 @@ game_characters
 <hr>
 <br>
 
-`POST /players/{id}` Create a player.
+`POST /players` Create a player.
 
 **Request**
 ```
@@ -241,7 +241,7 @@ game_characters
 <hr>
 <br>
 
-`POST /game-masters/{id}` Create a game master.
+`POST /game-masters` Create a game master.
 
 **Request**
 ```
@@ -312,7 +312,7 @@ game_characters
 <hr>
 <br>
 
-`POST /campaigns/{id}` Create a campaign.
+`POST /campaigns` Create a campaign.
 
 **Request**
 ```
@@ -406,7 +406,7 @@ game_characters
 <hr>
 <br>
 
-`POST /characters/{id}` Create a character.
+`POST /characters` Create a character.
 
 **Request**
 ```
@@ -524,7 +524,7 @@ game_characters
 <hr>
 <br>
 
-`POST /games/{id}` Create a game.
+`POST /games` Create a game.
 
 **Request**
 ```

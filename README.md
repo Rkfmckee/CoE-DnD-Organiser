@@ -176,8 +176,7 @@ game_characters
     "email_address": "joe.bloggs@dnd.com",
     "name": "Joe Bloggs",
     "date_of_birth": "1990-01-04",
-    "password": "password123",
-    "is_game_master": "false"
+    "password": "password123"
 }
 ```
 
@@ -194,7 +193,7 @@ game_characters
     "email_address": "john.smith@dnd.com",
     "name": "John Smith",
     "date_of_birth": "1990-01-01",
-    "password": "password123",
+    "password": "password123"
 }
 ```
 
@@ -366,7 +365,10 @@ game_characters
 		"race": "High Elf",
 		"class_levels": "12 Wizard (Bladesinging)",
         "created": "2024-01-29 11:40:00.00",
-        "player_id": "1"
+        "player": {
+            "id": "1",
+            "name": "John Smith"
+        }
     },
     {
         "id": "2",
@@ -374,7 +376,10 @@ game_characters
 		"race": "Warforged",
 		"class_levels": "17 Artificer",
         "created": "2024-01-29 11:41:00.00",
-        "player_id": "3"
+        "player": {
+            "id": "3",
+            "name": "Ryan McK"
+        }
     }
 ]
 ```
@@ -391,7 +396,10 @@ game_characters
     "race": "Warforged",
     "class_levels": "17 Artificer",
     "created": "2024-01-29 11:41:00.00",
-    "player_id": "3"
+    "player": {
+        "id": "3",
+        "name": "Ryan McK"
+    }
 }
 ```
 
@@ -448,8 +456,30 @@ game_characters
         "id": "1",
         "details": "A homebrew game based on Waterdeep: Dragon Heist.",
         "created": "2024-01-29 11:50:00.00",
-        "game_master_id": "3",
-        "campaign_id": "1"
+        "game_master": {
+            "id": "3",
+            "name": "Ryan McK"
+        },
+        "campaign_id": {
+            "id": "1",
+            "name": "Waterdeep: Dragon Heist"
+        },
+        "characters": [{
+            "id": "1",
+            "name": "Raymel the Wizard",
+            "player": {
+                "id": "1",
+                "name": "John Smith"
+            }
+        },
+        {
+            "id": "2",
+            "name": "Timbr",
+            "player": {
+                "id": "3",
+                "name": "Ryan McK"
+            }
+        }]
     }
 ]
 ```
@@ -464,8 +494,30 @@ game_characters
     "id": "1",
     "details": "A homebrew game based on Waterdeep: Dragon Heist.",
     "created": "2024-01-29 11:50:00.00",
-    "game_master_id": "3",
-    "campaign_id": "1"
+    "game_master": {
+        "id": "3",
+        "name": "Ryan McK"
+    },
+    "campaign_id": {
+        "id": "1",
+        "name": "Waterdeep: Dragon Heist"
+    },
+    "characters": [{
+        "id": "1",
+        "name": "Raymel the Wizard",
+        "player": {
+            "id": "1",
+            "name": "John Smith"
+        }
+    },
+    {
+        "id": "2",
+        "name": "Timbr",
+        "player": {
+            "id": "3",
+            "name": "Ryan McK"
+        }
+    }]
 }
 ```
 
@@ -522,14 +574,20 @@ game_characters
         "name": "Raymel the Wizard",
         "race": "High Elf",
         "class_levels": "12 Wizard (Bladesinging)",
-        "player_name": "John Smith"
+        "player": {
+            "id": "1",
+            "name": "John Smith"
+        }
     },
     {
         "character_id": "2",
         "name": "Timbr",
         "race": "Warforged",
         "class_levels": "17 Artificer",
-        "player_name": "Ryan McK"
+        "player": {
+            "id": "3",
+            "name": "Ryan McK"
+        }
     }
 ]
 ```
@@ -537,23 +595,13 @@ game_characters
 <hr>
 <br>
 
-`POST /games/{id}/characters{id}` Add a character to a game.
-
-**Request**
-```
-[
-    {
-        "game_id": "1",
-        "character_id": "3"
-    }
-]
-```
+`POST /games/{id}/characters/{id}` Add a character to a game.
 
 **Response** `201 Created`
 
 <hr>
 <br>
 
-`DELETE /games/{id}/characters{id}` Remove a character from a game.
+`DELETE /games/{id}/characters/{id}` Remove a character from a game.
 
 **Response** `204 No Content`

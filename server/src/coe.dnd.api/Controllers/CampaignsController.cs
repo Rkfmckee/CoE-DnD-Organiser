@@ -1,4 +1,3 @@
-using System.Net;
 using coe.dnd.api.ViewModels.Campaigns;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,3 @@
-using System.Net;
 using coe.dnd.api.ViewModels.Games;
 using Microsoft.AspNetCore.Mvc;
 

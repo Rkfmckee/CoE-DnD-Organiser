@@ -9,35 +9,35 @@ namespace coe.dnd.api.Controllers;
 public class GamesController : Controller
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<GameViewModel>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<GameViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetGames()
     {
         return Ok();
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(GameViewModel), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(GameViewModel), StatusCodes.Status200OK)]
     public IActionResult GetGameById(int id)
     {
         return Ok();
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
-    public IActionResult CreateGame(CreateGameViewModel gameMasterDetails)
+    [ProducesResponseType(typeof(CreateGameViewModel), StatusCodes.Status201Created)]
+    public IActionResult CreateGame(CreateGameViewModel gameDetails)
     {
-        return Created();
+        return CreatedAtAction(nameof(CreateGame), gameDetails);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public IActionResult UpdateGame(int id, UpdateGameViewModel gameMasterDetails)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult UpdateGame(int id, UpdateGameViewModel gameDetails)
     {
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeleteGame(int id)
     {
         return NoContent();

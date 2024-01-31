@@ -9,35 +9,35 @@ namespace coe.dnd.api.Controllers;
 public class CharactersController : Controller
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<CharacterViewModel>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<CharacterViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCharacter()
     {
         return Ok();
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(CharacterViewModel), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(CharacterViewModel), StatusCodes.Status200OK)]
     public IActionResult GetCharacterById(int id)
     {
         return Ok();
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(CreateCharacterViewModel), StatusCodes.Status201Created)]
     public IActionResult CreateCharacter(CreateCharacterViewModel characterDetails)
     {
-        return Created();
+        return CreatedAtAction(nameof(CreateCharacter), characterDetails);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult UpdateCharacter(int id, UpdateCharacterViewModel characterDetails)
     {
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeleteCharacter(int id)
     {
         return NoContent();

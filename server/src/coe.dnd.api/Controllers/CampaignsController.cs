@@ -9,35 +9,35 @@ namespace coe.dnd.api.Controllers;
 public class CampaignsController : Controller
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCampaigns()
     {
         return Ok();
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(CampaignViewModel), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(CampaignViewModel), StatusCodes.Status200OK)]
     public IActionResult GetCampaignById(int id)
     {
         return Ok();
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(CreateCampaignViewModel), StatusCodes.Status201Created)]
     public IActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
     {
-        return Created();
+        return CreatedAtAction(nameof(CreateCampaign), campaignDetails);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
     {
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeleteCampaign(int id)
     {
         return NoContent();

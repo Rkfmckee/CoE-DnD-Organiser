@@ -9,35 +9,35 @@ namespace coe.dnd.api.Controllers;
 public class PlayersController : Controller
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PlayerViewModel>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<PlayerViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetPlayers()
     {
         return Ok();
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(PlayerViewModel), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(PlayerViewModel), StatusCodes.Status200OK)]
     public IActionResult GetPlayerById(int id)
     {
         return Ok();
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(CreatePlayerViewModel), StatusCodes.Status201Created)]
     public IActionResult CreatePlayer(CreatePlayerViewModel playerDetails)
     {
-        return Created();
+        return CreatedAtAction(nameof(CreatePlayer), playerDetails);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult UpdatePlayer(int id, UpdatePlayerViewModel playerDetails)
     {
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeletePlayer(int id)
     {
         return NoContent();

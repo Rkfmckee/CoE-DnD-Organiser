@@ -1,44 +1,44 @@
 using System.Net;
-using coe.dnd.api.ViewModels.Players;
+using coe.dnd.api.ViewModels.Campaigns;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coe.dnd.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayersController : Controller
+public class CampaignsController : Controller
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PlayerViewModel>), (int)HttpStatusCode.OK)]
-    public IActionResult GetPlayers()
+    [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), (int)HttpStatusCode.OK)]
+    public IActionResult GetCampaigns()
     {
         return Ok();
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(PlayerViewModel), (int)HttpStatusCode.OK)]
-    public IActionResult GetPlayerById(int id)
+    [ProducesResponseType(typeof(CampaignViewModel), (int)HttpStatusCode.OK)]
+    public IActionResult GetCampaignById(int id)
     {
         return Ok();
     }
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created)]
-    public IActionResult CreatePlayer(CreatePlayerViewModel playerDetails)
+    public IActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
     {
         return Created();
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public IActionResult UpdatePlayer(int id, UpdatePlayerViewModel playerDetails)
+    public IActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
     {
         return Ok();
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public IActionResult DeletePlayer(int id)
+    public IActionResult DeleteCampaign(int id)
     {
         return NoContent();
     }

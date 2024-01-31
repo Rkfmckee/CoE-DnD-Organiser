@@ -1,44 +1,44 @@
 using System.Net;
-using coe.dnd.api.ViewModels.Players;
+using coe.dnd.api.ViewModels.Characters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coe.dnd.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayersController : Controller
+public class CharactersController : Controller
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PlayerViewModel>), (int)HttpStatusCode.OK)]
-    public IActionResult GetPlayers()
+    [ProducesResponseType(typeof(IEnumerable<CharacterViewModel>), (int)HttpStatusCode.OK)]
+    public IActionResult GetCharacter()
     {
         return Ok();
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(PlayerViewModel), (int)HttpStatusCode.OK)]
-    public IActionResult GetPlayerById(int id)
+    [ProducesResponseType(typeof(CharacterViewModel), (int)HttpStatusCode.OK)]
+    public IActionResult GetCharacterById(int id)
     {
         return Ok();
     }
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created)]
-    public IActionResult CreatePlayer(CreatePlayerViewModel playerDetails)
+    public IActionResult CreateCharacter(CreateCharacterViewModel characterDetails)
     {
         return Created();
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public IActionResult UpdatePlayer(int id, UpdatePlayerViewModel playerDetails)
+    public IActionResult UpdateCharacter(int id, UpdateCharacterViewModel characterDetails)
     {
         return Ok();
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public IActionResult DeletePlayer(int id)
+    public IActionResult DeleteCharacter(int id)
     {
         return NoContent();
     }

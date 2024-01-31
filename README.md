@@ -246,6 +246,7 @@ game_characters
 **Request**
 ```
 {
+    "player_id": "3",
     "planning_notes": "Last session..."
 }
 ```

@@ -6,18 +6,37 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: coe-dnd-organiser
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
       - db:/var/lib/postgresql/data
   flyway:
     image: flyway/flyway
-    command: -url=jdbc:postgresql://db/postgres -schemas=public -user=user
+    command: -url=jdbc:postgresql://db/coe-dnd-organiser -schemas=public -user=user
       -password=password -connectRetries=5 migrate
     volumes:
       - ./database:/flyway/sql
     depends_on:
       - db
+  server:
+    profiles: ["dev"]
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_URLS: "https://+:7121;http://+:5126;http://+:5107"
+      DbConnectionString: "Server=db,5432;Database=coe-dnd-organiser;User Id=user;Password=password;"
+    volumes:
+      - ./server:/app
+    ports:
+      - 7121:7121
+      - 5126:5126
+      - 5107:5107
+    depends_on:
+      - flyway
+
 volumes:
   db:
+  flyway:
+  server:

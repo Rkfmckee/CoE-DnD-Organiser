@@ -6,6 +6,7 @@ services:
     ports:
       - 5432:5432
     environment:
+      PGUSER: user
       POSTGRES_DB: coe-dnd-organiser
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -16,27 +17,24 @@ services:
     command: -url=jdbc:postgresql://db/coe-dnd-organiser -schemas=public -user=user
       -password=password -connectRetries=5 migrate
     volumes:
-      - ./database:/flyway/sql
+      - ./database/migrations/base:/flyway/sql
     depends_on:
       - db
   server:
     profiles: ["dev"]
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
     environment:
-      ASPNETCORE_URLS: "https://+:7121;http://+:5126;http://+:5107"
+      ASPNETCORE_URLS: "https://+:7121;http://+:5126"
       DbConnectionString: "Server=db,5432;Database=coe-dnd-organiser;User Id=user;Password=password;"
     volumes:
       - ./server:/app
     ports:
       - 7121:7121
       - 5126:5126
-      - 5107:5107
     depends_on:
       - flyway
 
 volumes:
   db:
-  flyway:
-  server:

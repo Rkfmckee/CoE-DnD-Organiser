@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG NETENV=Release
 WORKDIR /src
-COPY . ./
-RUN dotnet restore /coe.dnd.api/coe.dnd.api.csproj
-RUN dotnet publish /coe.dnd.api/coe.dnd.api.csproj -c $NETENV -o /app --no-restore
+COPY ./ ./
+RUN dotnet restore src/coe.dnd.api/coe.dnd.api.csproj
+RUN dotnet publish src/coe.dnd.api/coe.dnd.api.csproj -c $NETENV -o /app --no-restore
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

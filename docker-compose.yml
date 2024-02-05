@@ -33,6 +33,7 @@ services:
     ports:
       - 7121:7121
       - 5126:5126
+      - 5107:5107
     depends_on:
       - flyway
 

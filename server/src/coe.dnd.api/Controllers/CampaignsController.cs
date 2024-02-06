@@ -1,4 +1,5 @@
 using coe.dnd.api.ViewModels.Campaigns;
+using coe.dnd.dal.Contexts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coe.dnd.api.Controllers;
@@ -7,11 +8,29 @@ namespace coe.dnd.api.Controllers;
 [Route("api/[controller]")]
 public class CampaignsController : Controller
 {
+    #region Fields
+    
+    private readonly CoeDndOrganiserContext _context;
+    
+    #endregion
+
+    #region Constructors
+
+    public CampaignsController(CoeDndOrganiserContext context)
+    {
+        _context = context;
+    }
+    
+    #endregion
+    
+    #region Actions
+    
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCampaigns()
     {
-        return Ok();
+        var campaigns = _context.Campaigns.ToList();
+        return Ok(campaigns);
     }
 
     [HttpGet("{id}")]
@@ -41,4 +60,6 @@ public class CampaignsController : Controller
     {
         return NoContent();
     }
+    
+    #endregion
 }

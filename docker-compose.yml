@@ -26,7 +26,7 @@ services:
       context: ./server
       dockerfile: Dockerfile.local
     environment:
-      ASPNETCORE_URLS: "https://+:7121;http://+:5126"
+      ASPNETCORE_URLS: "https://+:7121;http://+:5126;http://+:5107"
       DbConnectionString: "Server=db,5432;Database=coe-dnd-organiser;User Id=user;Password=password;"
     volumes:
       - ./server:/app

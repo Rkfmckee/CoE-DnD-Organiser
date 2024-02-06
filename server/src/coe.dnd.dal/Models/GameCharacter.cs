@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace coe.dnd.dal.Models;
 
-public partial class GameCharacter
+public class GameCharacter : Entity
 {
-    public int Id { get; set; }
-
     public int? GameId { get; set; }
 
     public int? CharacterId { get; set; }

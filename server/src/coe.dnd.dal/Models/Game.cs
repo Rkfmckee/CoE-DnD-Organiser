@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace coe.dnd.dal.Models;
 
-public partial class Game
+public class Game : Entity
 {
-    public int Id { get; set; }
-
     public string Details { get; set; }
 
     public DateTime? Created { get; set; }

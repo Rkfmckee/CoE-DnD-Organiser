@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CoeDndOrganiserContext>();
+builder.Services.AddDbContext<DndOrganiserContext>();
 
 var app = builder.Build();
 

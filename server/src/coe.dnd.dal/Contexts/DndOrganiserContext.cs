@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace coe.dnd.dal.Contexts;
 
-public partial class CoeDndOrganiserContext : DbContext
+public partial class DndOrganiserContext : DbContext
 {
-    public CoeDndOrganiserContext()
+    public DndOrganiserContext()
     {
     }
 
-    public CoeDndOrganiserContext(DbContextOptions<CoeDndOrganiserContext> options)
+    public DndOrganiserContext(DbContextOptions<DndOrganiserContext> options)
         : base(options)
     {
     }
@@ -17,8 +17,6 @@ public partial class CoeDndOrganiserContext : DbContext
     public virtual DbSet<Campaign> Campaigns { get; set; }
 
     public virtual DbSet<Character> Characters { get; set; }
-
-    public virtual DbSet<FlywaySchemaHistory> FlywaySchemaHistories { get; set; }
 
     public virtual DbSet<Game> Games { get; set; }
 
@@ -29,7 +27,6 @@ public partial class CoeDndOrganiserContext : DbContext
     public virtual DbSet<Player> Players { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Server=localhost,5432;Database=coe-dnd-organiser;User Id=user;Password=password;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -89,45 +86,6 @@ public partial class CoeDndOrganiserContext : DbContext
                 .HasForeignKey(d => d.PlayerId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_player");
-        });
-
-        modelBuilder.Entity<FlywaySchemaHistory>(entity =>
-        {
-            entity.HasKey(e => e.InstalledRank).HasName("flyway_schema_history_pk");
-
-            entity.ToTable("flyway_schema_history");
-
-            entity.HasIndex(e => e.Success, "flyway_schema_history_s_idx");
-
-            entity.Property(e => e.InstalledRank)
-                .ValueGeneratedNever()
-                .HasColumnName("installed_rank");
-            entity.Property(e => e.Checksum).HasColumnName("checksum");
-            entity.Property(e => e.Description)
-                .IsRequired()
-                .HasMaxLength(200)
-                .HasColumnName("description");
-            entity.Property(e => e.ExecutionTime).HasColumnName("execution_time");
-            entity.Property(e => e.InstalledBy)
-                .IsRequired()
-                .HasMaxLength(100)
-                .HasColumnName("installed_by");
-            entity.Property(e => e.InstalledOn)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("installed_on");
-            entity.Property(e => e.Script)
-                .IsRequired()
-                .HasMaxLength(1000)
-                .HasColumnName("script");
-            entity.Property(e => e.Success).HasColumnName("success");
-            entity.Property(e => e.Type)
-                .IsRequired()
-                .HasMaxLength(20)
-                .HasColumnName("type");
-            entity.Property(e => e.Version)
-                .HasMaxLength(50)
-                .HasColumnName("version");
         });
 
         modelBuilder.Entity<Game>(entity =>

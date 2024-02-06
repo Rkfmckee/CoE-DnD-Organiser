@@ -17,4 +17,9 @@
   <ItemGroup>
     <ProjectReference Include="..\coe.dnd.dal\coe.dnd.dal.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="coe.dnd.dal\obj\coe.dnd.dal.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="coe.dnd.dal\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="coe.dnd.dal\Properties\launchSettings.json" />
+  </ItemGroup>
 </Project>

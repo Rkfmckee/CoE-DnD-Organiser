@@ -10,13 +10,13 @@ public class CampaignsController : Controller
 {
     #region Fields
     
-    private readonly CoeDndOrganiserContext _context;
+    private readonly DndOrganiserContext _context;
     
     #endregion
 
     #region Constructors
 
-    public CampaignsController(CoeDndOrganiserContext context)
+    public CampaignsController(DndOrganiserContext context)
     {
         _context = context;
     }

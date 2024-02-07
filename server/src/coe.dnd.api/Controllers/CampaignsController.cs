@@ -1,7 +1,7 @@
 using AutoMapper;
 using coe.dnd.api.ViewModels.Campaigns;
-using coe.dnd.dal.Interfaces;
 using coe.dnd.dal.Models;
+using coe.dnd.services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coe.dnd.api.Controllers;
@@ -10,12 +10,12 @@ namespace coe.dnd.api.Controllers;
 [Route("api/[controller]")]
 public class CampaignsController : Controller
 {
-    private readonly IDndOrganiserDatabase _database;
+    private readonly ICampaignService _campaignService;
     private readonly IMapper _mapper;
     
-    public CampaignsController(IDndOrganiserDatabase database, IMapper mapper)
+    public CampaignsController(ICampaignService campaignService, IMapper mapper)
     {
-        _database = database;
+        _campaignService = campaignService;
         _mapper = mapper;
     }
     
@@ -24,12 +24,10 @@ public class CampaignsController : Controller
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCampaigns()
     {
-        var campaigns = _database.Get<Campaign>();
+        var campaigns = _campaignService.GetCampaigns();
         if (campaigns == null) return NotFound();
         
-        var campaignViewModels = _mapper.Map<IEnumerable<CampaignViewModel>>(campaigns);
-        
-        return Ok(campaignViewModels);
+        return Ok(_mapper.Map<IEnumerable<CampaignViewModel>>(campaigns));
     }
 
     [HttpGet("{id}")]
@@ -37,12 +35,10 @@ public class CampaignsController : Controller
     [ProducesResponseType(typeof(CampaignViewModel), StatusCodes.Status200OK)]
     public IActionResult GetCampaignById(int id)
     {
-        var campaign = _database.Get<>();
+        var campaign = _campaignService.GetCampaign(id);
         if (campaign == null) return NotFound();
-
-        var campaignViewModel = _mapper.Map<CampaignViewModel>(campaign);
         
-        return Ok(campaignViewModel);
+        return Ok(_mapper.Map<CampaignViewModel>(campaign));
     }
 
     [HttpPost]
@@ -51,9 +47,7 @@ public class CampaignsController : Controller
     public IActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
     {
         var campaign = _mapper.Map<Campaign>(campaignDetails);
-
-        var addSuccessful = _database.Add(campaign);
-        if (!addSuccessful) return BadRequest(campaignDetails);
+        _campaignService.CreateCampaign(campaign);
         
         return CreatedAtAction(nameof(CreateCampaign), null);
     }
@@ -64,13 +58,12 @@ public class CampaignsController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
     {
-        var campaign = _database.Get(id);
+        var campaign = _campaignService.GetCampaign(id);
         if (campaign == null) return NotFound();
 
         _mapper.Map(campaignDetails, campaign);
 
-        var updateSuccessful = _database.Update(campaign);
-        if (!updateSuccessful) return BadRequest(campaignDetails);
+        _campaignService.UpdateCampaign(id, campaign);
         
         return Ok();
     }
@@ -80,11 +73,7 @@ public class CampaignsController : Controller
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeleteCampaign(int id)
     {
-        var campaign = _database.Get(id);
-        if (campaign == null) return NotFound();
-        
-        var deleteSuccessful = _database.Delete(campaign);
-        if (!deleteSuccessful) return BadRequest();
+        _campaignService.DeleteCampaign(id);
         
         return NoContent();
     }

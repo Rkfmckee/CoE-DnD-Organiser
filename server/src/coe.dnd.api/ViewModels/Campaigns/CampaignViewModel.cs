@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using coe.dnd.dal.Models;
-
 namespace coe.dnd.api.ViewModels.Campaigns;
 
 public class CampaignViewModel

@@ -1,6 +1,8 @@
 using coe.dnd.api;
 using coe.dnd.dal.Contexts;
 using coe.dnd.dal.Interfaces;
+using coe.dnd.services.Interfaces;
+using coe.dnd.services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddDbContext<DndOrganiserContext>();
 builder.Services.AddAutoMapper(config => config.AllowNullCollections = true, typeof(Program).Assembly);
 
 builder.Services.AddScoped<IDndOrganiserDatabase, DndOrganiserContext>(_ => new DndOrganiserContext(EnvironmentVariables.DbConnectionString));
+builder.Services.AddScoped<ICampaignService, CampaignService>();
 
 var app = builder.Build();
 

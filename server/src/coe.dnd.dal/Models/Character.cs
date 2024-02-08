@@ -26,7 +26,7 @@ public partial class Character
     public DateTime Created { get; set; }
 
     [Column("player_id")]
-    public int? PlayerId { get; set; }
+    public int PlayerId { get; set; }
 
     [InverseProperty("Character")]
     public virtual ICollection<GameCharacter> GameCharacters { get; set; } = new List<GameCharacter>();

@@ -11,10 +11,10 @@ public partial class GameCharacter
     public int Id { get; set; }
 
     [Column("game_id")]
-    public int? GameId { get; set; }
+    public int GameId { get; set; }
 
     [Column("character_id")]
-    public int? CharacterId { get; set; }
+    public int CharacterId { get; set; }
 
     [ForeignKey("CharacterId")]
     [InverseProperty("GameCharacters")]

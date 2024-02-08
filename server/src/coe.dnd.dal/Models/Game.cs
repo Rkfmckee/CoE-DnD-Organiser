@@ -17,7 +17,7 @@ public partial class Game
     public DateTime? Created { get; set; }
 
     [Column("game_master_id")]
-    public int? GameMasterId { get; set; }
+    public int GameMasterId { get; set; }
 
     [Column("campaign_id")]
     public int? CampaignId { get; set; }

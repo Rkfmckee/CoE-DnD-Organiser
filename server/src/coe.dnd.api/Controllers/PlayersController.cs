@@ -35,8 +35,9 @@ public class PlayersController : Controller
     [ProducesResponseType(typeof(PlayerViewModel), StatusCodes.Status200OK)]
     public IActionResult GetPlayerById(int id)
     {
+        if (!_playerService.PlayerExists(id)) return NotFound();
+
         var playerData = _playerService.GetPlayerData(id);
-        if (playerData == null) return NotFound();
         
         return Ok(_mapper.Map<PlayerViewModel>(playerData));
     }

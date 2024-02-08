@@ -35,8 +35,9 @@ public class CampaignsController : Controller
     [ProducesResponseType(typeof(CampaignViewModel), StatusCodes.Status200OK)]
     public IActionResult GetCampaignById(int id)
     {
+        if (!_campaignService.CampaignExists(id)) return NotFound();
+
         var campaignData = _campaignService.GetCampaignData(id);
-        if (campaignData == null) return NotFound();
         
         return Ok(_mapper.Map<CampaignViewModel>(campaignData));
     }

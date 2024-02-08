@@ -17,7 +17,7 @@ services:
     command: -url=jdbc:postgresql://db/coe-dnd-organiser -schemas=public -user=user
       -password=password -connectRetries=5 migrate
     volumes:
-      - ./database/migrations/base:/flyway/sql
+      - ./database/migrations:/flyway/sql
     depends_on:
       - db
   server:

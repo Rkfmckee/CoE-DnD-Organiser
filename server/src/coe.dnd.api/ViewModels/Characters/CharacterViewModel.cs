@@ -8,6 +8,5 @@ public class CharacterViewModel
     public string Name { get; set; }
     public string Race { get; set; }
     public string ClassLevels { get; set; }
-    public DateTime Created { get; set; }
     public PlayerViewModel Player { get; set; }
 }

@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DndOrganiserContext>();
-builder.Services.AddAutoMapper(config => config.AllowNullCollections = true, typeof(Program).Assembly);
+builder.Services.AddAutoMapper(config => config.AllowNullCollections = true, typeof(Program).Assembly, typeof(CampaignService).Assembly);
 
 builder.Services.AddScoped<IDndOrganiserDatabase, DndOrganiserContext>(_ => new DndOrganiserContext(EnvironmentVariables.DbConnectionString));
 builder.Services.AddScoped<ICampaignService, CampaignService>();

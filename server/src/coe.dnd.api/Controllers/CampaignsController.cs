@@ -1,6 +1,7 @@
 using AutoMapper;
 using coe.dnd.api.ViewModels.Campaigns;
 using coe.dnd.dal.Models;
+using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,10 +25,10 @@ public class CampaignsController : Controller
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCampaigns()
     {
-        var campaigns = _campaignService.GetCampaigns();
-        if (campaigns == null) return NotFound();
+        var campaignsData = _campaignService.GetCampaignsData();
+        if (campaignsData == null) return NotFound();
         
-        return Ok(_mapper.Map<IEnumerable<CampaignViewModel>>(campaigns));
+        return Ok(_mapper.Map<IList<CampaignViewModel>>(campaignsData));
     }
 
     [HttpGet("{id}")]
@@ -35,44 +36,43 @@ public class CampaignsController : Controller
     [ProducesResponseType(typeof(CampaignViewModel), StatusCodes.Status200OK)]
     public IActionResult GetCampaignById(int id)
     {
-        var campaign = _campaignService.GetCampaign(id);
-        if (campaign == null) return NotFound();
+        var campaignData = _campaignService.GetCampaignData(id);
+        if (campaignData == null) return NotFound();
         
-        return Ok(_mapper.Map<CampaignViewModel>(campaign));
+        return Ok(_mapper.Map<CampaignViewModel>(campaignData));
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(CreateCampaignViewModel), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public IActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
     {
-        var campaign = _mapper.Map<Campaign>(campaignDetails);
-        _campaignService.CreateCampaign(campaign);
+        var campaignData = _mapper.Map<CampaignDto>(campaignDetails);
+        _campaignService.CreateCampaign(campaignData);
         
         return CreatedAtAction(nameof(CreateCampaign), null);
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(UpdateCampaignViewModel), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
     {
-        var campaign = _campaignService.GetCampaign(id);
-        if (campaign == null) return NotFound();
+        if (!_campaignService.CampaignExists(id)) return NotFound();
 
-        _mapper.Map(campaignDetails, campaign);
+        var campaignData = _mapper.Map<CampaignDto>(campaignDetails);
 
-        _campaignService.UpdateCampaign(id, campaign);
+        _campaignService.UpdateCampaign(id, campaignData);
         
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeleteCampaign(int id)
     {
+        if (!_campaignService.CampaignExists(id)) return NotFound();
+        
         _campaignService.DeleteCampaign(id);
         
         return NoContent();

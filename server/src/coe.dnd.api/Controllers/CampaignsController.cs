@@ -1,6 +1,5 @@
 using AutoMapper;
 using coe.dnd.api.ViewModels.Campaigns;
-using coe.dnd.dal.Models;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +59,6 @@ public class CampaignsController : Controller
         if (!_campaignService.CampaignExists(id)) return NotFound();
 
         var campaignData = _mapper.Map<CampaignDto>(campaignDetails);
-
         _campaignService.UpdateCampaign(id, campaignData);
         
         return Ok();

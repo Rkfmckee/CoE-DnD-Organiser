@@ -16,6 +16,7 @@ builder.Services.AddAutoMapper(config => config.AllowNullCollections = true, typ
 
 builder.Services.AddScoped<IDndOrganiserDatabase, DndOrganiserContext>(_ => new DndOrganiserContext(EnvironmentVariables.DbConnectionString));
 builder.Services.AddScoped<ICampaignService, CampaignService>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 var app = builder.Build();
 

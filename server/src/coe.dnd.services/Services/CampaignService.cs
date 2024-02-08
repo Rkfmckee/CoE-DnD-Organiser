@@ -1,4 +1,3 @@
-using System.Collections;
 using AutoMapper;
 using coe.dnd.dal.Interfaces;
 using coe.dnd.dal.Models;
@@ -29,32 +28,26 @@ public class CampaignService : ICampaignService
     
     public Campaign GetCampaign(int id)
     {
-        var campaign = _database.Get<Campaign>()
+        return _database.Get<Campaign>()
             .Where(new CampaignByIdSpec(id))
             .SingleOrDefault();
-
-        return campaign;
     }
     
     public CampaignDto GetCampaignData(int id)
     {
-        var campaign = GetCampaign(id);
-        return _mapper.Map<CampaignDto>(campaign);
+        return _mapper.Map<CampaignDto>(GetCampaign(id));
     }
 
     public IList<Campaign> GetCampaigns(string name = null, string theme = null, string writer = null)
     {
-        var campaigns = _database.Get<Campaign>()
+        return _database.Get<Campaign>()
             .Where(new CampaignSearchSpec(name, theme, writer))
             .ToList();
-
-        return campaigns;
     }
     
     public IList<CampaignDto> GetCampaignsData(string name = null, string theme = null, string writer = null)
     {
-        var campaigns = GetCampaigns(name, theme, writer);
-        return _mapper.Map<IList<CampaignDto>>(campaigns);
+        return _mapper.Map<IList<CampaignDto>>(GetCampaigns(name, theme, writer));
     }
 
     public void CreateCampaign(CampaignDto campaignData)

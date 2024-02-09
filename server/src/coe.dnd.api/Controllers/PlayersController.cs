@@ -33,7 +33,7 @@ public class PlayersController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(PlayerViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetPlayerById(int id)
+    public IActionResult GetPlayer(int id)
     {
         if (!_playerService.PlayerExists(id)) return NotFound();
 

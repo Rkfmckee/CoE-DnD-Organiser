@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using coe.dnd.dal.Models;
-using coe.dnd.dal.Specifications.Players;
 using Unosquare.EntityFramework.Specification.Common.Extensions;
 using Unosquare.EntityFramework.Specification.Common.Primitive;
 

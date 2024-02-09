@@ -1,4 +1,3 @@
-using coe.dnd.dal.Models;
 using coe.dnd.services.DataTransferObjects;
 
 namespace coe.dnd.services.Interfaces;

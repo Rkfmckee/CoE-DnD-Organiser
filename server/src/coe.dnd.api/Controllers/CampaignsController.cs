@@ -22,7 +22,7 @@ public class CampaignsController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetCampaigns()
+    public ActionResult<IList<CampaignViewModel>> GetCampaigns()
     {
         var campaignsData = _campaignService.GetCampaigns();
         if (campaignsData == null) return NotFound();
@@ -33,7 +33,7 @@ public class CampaignsController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CampaignViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetCampaignById(int id)
+    public ActionResult<CampaignViewModel> GetCampaign(int id)
     {
         if (!_campaignService.CampaignExists(id)) return NotFound();
 
@@ -44,7 +44,7 @@ public class CampaignsController : Controller
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public IActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
+    public ActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
     {
         var campaignData = _mapper.Map<CampaignDto>(campaignDetails);
         _campaignService.CreateCampaign(campaignData);
@@ -55,7 +55,7 @@ public class CampaignsController : Controller
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
+    public ActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
     {
         if (!_campaignService.CampaignExists(id)) return NotFound();
 
@@ -68,7 +68,7 @@ public class CampaignsController : Controller
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public IActionResult DeleteCampaign(int id)
+    public ActionResult DeleteCampaign(int id)
     {
         if (!_campaignService.CampaignExists(id)) return NotFound();
         

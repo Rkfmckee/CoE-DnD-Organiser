@@ -33,7 +33,7 @@ public class GamesController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GameViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetGameById(int id)
+    public IActionResult GetGame(int id)
     {
         if (!_gameService.GameExists(id)) return NotFound();
 

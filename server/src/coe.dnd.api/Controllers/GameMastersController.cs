@@ -1,6 +1,5 @@
 using AutoMapper;
 using coe.dnd.api.ViewModels.GameMasters;
-using coe.dnd.api.ViewModels.Players;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +35,7 @@ public class GameMastersController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GameMasterViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetGameMasterById(int id)
+    public IActionResult GetGameMaster(int id)
     {
         if (!_gameMasterService.GameMasterExists(id)) return NotFound();
         

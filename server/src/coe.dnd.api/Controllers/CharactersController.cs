@@ -33,7 +33,7 @@ public class CharactersController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CharacterViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetCharacterById(int id)
+    public IActionResult GetCharacter(int id)
     {
         if (!_characterService.CharacterExists(id)) return NotFound();
 

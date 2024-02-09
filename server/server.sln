@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coe.dnd.dal", "src\coe.dnd.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coe.dnd.services", "src\coe.dnd.services\coe.dnd.services.csproj", "{38C6762F-35D5-41EF-A419-497AC50304F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{678F306F-63CB-4022-8B80-004A16183CA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coe.dnd.api.test", "test\coe.dnd.api.test\coe.dnd.api.test.csproj", "{462ADBE6-355E-4D79-812A-98EB13193F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,10 +36,15 @@ Global
 		{38C6762F-35D5-41EF-A419-497AC50304F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38C6762F-35D5-41EF-A419-497AC50304F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38C6762F-35D5-41EF-A419-497AC50304F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{462ADBE6-355E-4D79-812A-98EB13193F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{462ADBE6-355E-4D79-812A-98EB13193F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{462ADBE6-355E-4D79-812A-98EB13193F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{462ADBE6-355E-4D79-812A-98EB13193F42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{68122333-8C21-4F37-8B13-669EF760436E} = {376EFF62-C747-4BF2-A0B0-BC65B9351E3C}
 		{20FDCD11-21F7-4ACC-8576-6123BBF8BC79} = {376EFF62-C747-4BF2-A0B0-BC65B9351E3C}
 		{38C6762F-35D5-41EF-A419-497AC50304F3} = {376EFF62-C747-4BF2-A0B0-BC65B9351E3C}
+		{462ADBE6-355E-4D79-812A-98EB13193F42} = {678F306F-63CB-4022-8B80-004A16183CA1}
 	EndGlobalSection
 EndGlobal

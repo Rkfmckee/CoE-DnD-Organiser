@@ -18,6 +18,7 @@ builder.Services.AddScoped<IDndOrganiserDatabase, DndOrganiserContext>(_ => new 
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IGameMasterService, GameMasterService>();
+builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 var app = builder.Build();

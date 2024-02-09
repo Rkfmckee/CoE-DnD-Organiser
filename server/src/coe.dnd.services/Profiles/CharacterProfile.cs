@@ -13,9 +13,8 @@ public class CharacterProfile : Profile
             .ForMember(d => d.Player, s => s.MapFrom(x => x.Player));
 
         CreateMap<CharacterDto, Character>()
-            .ForMember(d => d.Id, o => o.Ignore())
-            .ForMember(d => d.PlayerId, o => o.MapFrom(x => x.Player.Id))
-            .IgnoreAllNull();
+            .IgnoreAllNull()
+            .ForMember(d => d.Id, o => o.Ignore());
         CreateMap<CharacterDto, GameCharacter>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.CharacterId, o => o.MapFrom(x => x.Id));

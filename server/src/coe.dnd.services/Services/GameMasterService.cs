@@ -28,35 +28,18 @@ public class GameMasterService : IGameMasterService
             .Any();
     }
     
-    public GameMaster GetGameMaster(int id)
+    public GameMasterDto GetGameMaster(int id)
     {
-        return _database.Get<GameMaster>()
-            .Where(new GameMasterByIdSpec(id))
+        return _mapper
+            .ProjectTo<GameMasterDto>(GetGameMasterQueryable(id))
             .SingleOrDefault();
     }
     
-    public GameMasterDto GetGameMasterData(int id)
+    public IList<GameMasterDto> GetGameMasters()
     {
-        var gameMasterData = _mapper.Map<GameMasterDto>(GetGameMaster(id));
-        gameMasterData.PlayerName = GetGameMasterName(gameMasterData);
-
-        return gameMasterData;
-    }
-
-    public IList<GameMaster> GetGameMasters()
-    {
-        return _database.Get<GameMaster>()
+        return _mapper
+            .ProjectTo<GameMasterDto>(GetGameMastersQueryable())
             .ToList();
-    }
-    
-    public IList<GameMasterDto> GetGameMastersData()
-    {
-        var gameMastersData = _mapper.Map<IList<GameMasterDto>>(GetGameMasters());
-        
-        foreach (var gameMasterData in gameMastersData)
-            gameMasterData.PlayerName = GetGameMasterName(gameMasterData);
-        
-        return gameMastersData;
     }
 
     public void CreateGameMaster(GameMasterDto gameMasterData)
@@ -70,7 +53,7 @@ public class GameMasterService : IGameMasterService
 
     public void UpdateGameMaster(int id, GameMasterDto gameMasterData)
     {
-        var gameMaster = GetGameMaster(id);
+        var gameMaster = GetGameMasterObject(id);
         
         _mapper.Map(gameMasterData, gameMaster);
         _database.SaveChanges();
@@ -78,14 +61,25 @@ public class GameMasterService : IGameMasterService
 
     public void DeleteGameMaster(int id)
     {
-        var gameMaster = GetGameMaster(id);
+        var gameMaster = GetGameMasterObject(id);
         
         _database.Delete(gameMaster);
         _database.SaveChanges();
     }
-
-    private string GetGameMasterName(GameMasterDto gameMasterData)
+    
+    private IQueryable<GameMaster> GetGameMasterQueryable(int id)
     {
-        return _playerService.GetPlayer(gameMasterData.PlayerId).Name;
+        return _database.Get<GameMaster>()
+            .Where(new GameMasterByIdSpec(id));
+    }
+    
+    private GameMaster GetGameMasterObject(int id)
+    {
+        return GetGameMasterQueryable(id).SingleOrDefault();
+    }
+    
+    private IQueryable<GameMaster> GetGameMastersQueryable()
+    {
+        return _database.Get<GameMaster>();
     }
 }

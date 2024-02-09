@@ -26,28 +26,18 @@ public class CampaignService : ICampaignService
             .Any();
     }
     
-    public Campaign GetCampaign(int id)
+    public CampaignDto GetCampaign(int id)
     {
-        return _database.Get<Campaign>()
-            .Where(new CampaignByIdSpec(id))
+        return _mapper
+            .ProjectTo<CampaignDto>(GetCampaignQueryable(id))
             .SingleOrDefault();
     }
     
-    public CampaignDto GetCampaignData(int id)
+    public IList<CampaignDto> GetCampaigns(string name = null, string theme = null, string writer = null)
     {
-        return _mapper.Map<CampaignDto>(GetCampaign(id));
-    }
-
-    public IList<Campaign> GetCampaigns(string name = null, string theme = null, string writer = null)
-    {
-        return _database.Get<Campaign>()
-            .Where(new CampaignSearchSpec(name, theme, writer))
+        return _mapper
+            .ProjectTo<CampaignDto>(GetCampaignsQueryable(name, theme, writer))
             .ToList();
-    }
-    
-    public IList<CampaignDto> GetCampaignsData(string name = null, string theme = null, string writer = null)
-    {
-        return _mapper.Map<IList<CampaignDto>>(GetCampaigns(name, theme, writer));
     }
 
     public void CreateCampaign(CampaignDto campaignData)
@@ -61,7 +51,7 @@ public class CampaignService : ICampaignService
 
     public void UpdateCampaign(int id, CampaignDto campaignData)
     {
-        var campaign = GetCampaign(id);
+        var campaign = GetCampaignObject(id);
         
         _mapper.Map(campaignData, campaign);
         _database.SaveChanges();
@@ -69,9 +59,26 @@ public class CampaignService : ICampaignService
 
     public void DeleteCampaign(int id)
     {
-        var campaign = GetCampaign(id);
+        var campaign = GetCampaignObject(id);
         
         _database.Delete(campaign);
         _database.SaveChanges();
+    }
+    
+    private IQueryable<Campaign> GetCampaignQueryable(int id)
+    {
+        return _database.Get<Campaign>()
+            .Where(new CampaignByIdSpec(id));
+    }
+    
+    private Campaign GetCampaignObject(int id)
+    {
+        return GetCampaignQueryable(id).SingleOrDefault();
+    }
+    
+    private IQueryable<Campaign> GetCampaignsQueryable(string name = null, string theme = null, string writer = null)
+    {
+        return _database.Get<Campaign>()
+            .Where(new CampaignSearchSpec(name, theme, writer));
     }
 }

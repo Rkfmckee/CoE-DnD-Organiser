@@ -26,28 +26,18 @@ public class CharacterService : ICharacterService
             .Any();
     }
     
-    public Character GetCharacter(int id)
+    public CharacterDto GetCharacter(int id)
     {
-        return _database.Get<Character>()
-            .Where(new CharacterByIdSpec(id))
+        return _mapper
+            .ProjectTo<CharacterDto>(GetCharacterQueryable(id))
             .SingleOrDefault();
     }
     
-    public CharacterDto GetCharacterData(int id)
+    public IList<CharacterDto> GetCharacters(string name = null, string race = null, string @class = null)
     {
-        return _mapper.Map<CharacterDto>(GetCharacter(id));
-    }
-
-    public IList<Character> GetCharacters(string name = null, string race = null, string @class = null)
-    {
-        return _database.Get<Character>()
-            .Where(new CharacterSearchSpec(name, race, @class))
+        return _mapper
+            .ProjectTo<CharacterDto>(GetCharactersQueryable(name, race, @class))
             .ToList();
-    }
-    
-    public IList<CharacterDto> GetCharactersData(string name = null, string race = null, string @class = null)
-    {
-        return _mapper.Map<IList<CharacterDto>>(GetCharacters(name, race, @class));
     }
 
     public void CreateCharacter(CharacterDto characterData)
@@ -61,7 +51,8 @@ public class CharacterService : ICharacterService
 
     public void UpdateCharacter(int id, CharacterDto characterData)
     {
-        var character = GetCharacter(id);
+        var character = GetCharacterObject(id);
+        characterData.PlayerId = 50;
         
         _mapper.Map(characterData, character);
         _database.SaveChanges();
@@ -69,9 +60,26 @@ public class CharacterService : ICharacterService
 
     public void DeleteCharacter(int id)
     {
-        var character = GetCharacter(id);
+        var character = GetCharacterObject(id);
         
         _database.Delete(character);
         _database.SaveChanges();
+    }
+    
+    private IQueryable<Character> GetCharacterQueryable(int id)
+    {
+        return _database.Get<Character>()
+            .Where(new CharacterByIdSpec(id));
+    }
+    
+    private Character GetCharacterObject(int id)
+    {
+        return GetCharacterQueryable(id).SingleOrDefault();
+    }
+    
+    private IQueryable<Character> GetCharactersQueryable(string name = null, string race = null, string @class = null)
+    {
+        return _database.Get<Character>()
+            .Where(new CharacterSearchSpec(name, race, @class));
     }
 }

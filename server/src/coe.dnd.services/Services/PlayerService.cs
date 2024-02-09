@@ -26,28 +26,18 @@ public class PlayerService : IPlayerService
             .Any();
     }
     
-    public Player GetPlayer(int id)
+    public PlayerDto GetPlayer(int id)
     {
-        return _database.Get<Player>()
-            .Where(new PlayerByIdSpec(id))
+        return _mapper
+            .ProjectTo<PlayerDto>(GetPlayerQueryable(id))
             .SingleOrDefault();
     }
     
-    public PlayerDto GetPlayerData(int id)
+    public IList<PlayerDto> GetPlayers(string name = null, string email = null)
     {
-        return _mapper.Map<PlayerDto>(GetPlayer(id));
-    }
-
-    public IList<Player> GetPlayers(string name = null, string email = null)
-    {
-        return _database.Get<Player>()
-            .Where(new PlayerSearchSpec(name, email))
+        return _mapper
+            .ProjectTo<PlayerDto>(GetPlayersQueryable(name, email))
             .ToList();
-    }
-    
-    public IList<PlayerDto> GetPlayersData(string name = null, string email = null)
-    {
-        return _mapper.Map<IList<PlayerDto>>(GetPlayers(name, email));
     }
 
     public void CreatePlayer(PlayerDto playerData)
@@ -62,7 +52,7 @@ public class PlayerService : IPlayerService
 
     public void UpdatePlayer(int id, PlayerDto playerData)
     {
-        var player = GetPlayer(id);
+        var player = GetPlayerObject(id);
         
         if (!string.IsNullOrEmpty(playerData.Password))
             playerData.Password = BCrypt.Net.BCrypt.HashPassword(playerData.Password);
@@ -73,9 +63,26 @@ public class PlayerService : IPlayerService
 
     public void DeletePlayer(int id)
     {
-        var player = GetPlayer(id);
+        var player = GetPlayerObject(id);
         
         _database.Delete(player);
         _database.SaveChanges();
+    }
+    
+    private IQueryable<Player> GetPlayerQueryable(int id)
+    {
+        return _database.Get<Player>()
+            .Where(new PlayerByIdSpec(id));
+    }
+    
+    private Player GetPlayerObject(int id)
+    {
+        return GetPlayerQueryable(id).SingleOrDefault();
+    }
+    
+    private IQueryable<Player> GetPlayersQueryable(string name = null, string email = null)
+    {
+        return _database.Get<Player>()
+            .Where(new PlayerSearchSpec(name, email));
     }
 }

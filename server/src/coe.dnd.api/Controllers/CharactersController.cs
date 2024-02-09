@@ -24,7 +24,7 @@ public class CharactersController : Controller
     [ProducesResponseType(typeof(IEnumerable<CharacterViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCharacters()
     {
-        var charactersData = _characterService.GetCharactersData();
+        var charactersData = _characterService.GetCharacters();
         if (charactersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<CharacterViewModel>>(charactersData));
@@ -37,7 +37,7 @@ public class CharactersController : Controller
     {
         if (!_characterService.CharacterExists(id)) return NotFound();
 
-        var characterData = _characterService.GetCharacterData(id);
+        var characterData = _characterService.GetCharacter(id);
         
         return Ok(_mapper.Map<CharacterViewModel>(characterData));
     }

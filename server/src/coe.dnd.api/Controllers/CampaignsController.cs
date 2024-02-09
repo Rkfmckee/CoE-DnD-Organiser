@@ -24,7 +24,7 @@ public class CampaignsController : Controller
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetCampaigns()
     {
-        var campaignsData = _campaignService.GetCampaignsData();
+        var campaignsData = _campaignService.GetCampaigns();
         if (campaignsData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<CampaignViewModel>>(campaignsData));
@@ -37,7 +37,7 @@ public class CampaignsController : Controller
     {
         if (!_campaignService.CampaignExists(id)) return NotFound();
 
-        var campaignData = _campaignService.GetCampaignData(id);
+        var campaignData = _campaignService.GetCampaign(id);
         
         return Ok(_mapper.Map<CampaignViewModel>(campaignData));
     }

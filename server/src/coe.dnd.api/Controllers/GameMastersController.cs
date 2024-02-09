@@ -27,7 +27,7 @@ public class GameMastersController : Controller
     [ProducesResponseType(typeof(IEnumerable<GameMasterViewModel>), StatusCodes.Status200OK)]
     public IActionResult GetGameMasters()
     {
-        var gameMastersData = _gameMasterService.GetGameMastersData();
+        var gameMastersData = _gameMasterService.GetGameMasters();
         if (gameMastersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<GameMasterViewModel>>(gameMastersData));
@@ -40,7 +40,7 @@ public class GameMastersController : Controller
     {
         if (!_gameMasterService.GameMasterExists(id)) return NotFound();
         
-        var gameMasterData = _gameMasterService.GetGameMasterData(id);
+        var gameMasterData = _gameMasterService.GetGameMaster(id);
         
         return Ok(_mapper.Map<GameMasterViewModel>(gameMasterData));
     }

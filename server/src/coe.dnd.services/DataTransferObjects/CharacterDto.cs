@@ -6,5 +6,6 @@ public class CharacterDto
     public string Name { get; set; }
     public string Race { get; set; }
     public string ClassLevels { get; set; }
+    public int? PlayerId { get; set; }
     public PlayerDto Player { get; set; }
 }

@@ -13,6 +13,11 @@ public static class ControllerTestExtensions
         @this.Result.Should().BeOfType<TU>();
         return (T)((ObjectResult)@this.Result).Value;
     }
+    
+    public static void AssertObjectResult<T>(this ActionResult @this) where T : ActionResult
+    {
+        @this.Should().BeOfType<T>();
+    }
         
     public static void AssertResult<T, TU>(this ActionResult<T> @this) where TU : ActionResult
     {

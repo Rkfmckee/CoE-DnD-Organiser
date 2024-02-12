@@ -41,6 +41,19 @@ public class CampaignControllerTests
         _campaignService.Received(1).GetCampaign(id);
         _mapper.Received(1).Map<CampaignViewModel>(campaign);
     }
+    
+    [Fact]
+    public void GetCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
+    {
+        const int id = 1;
+        var controller = new CampaignsController(_campaignService, _mapper);
+
+        _campaignService.CampaignExists(id).Returns(false);
+
+        var actionResult = controller.GetCampaign(id).Result;
+
+        actionResult.Should().BeOfType<NotFoundResult>();
+    }
 
     [Theory]
     [InlineData("campaignName", "campaignTheme", "writerName")]
@@ -105,6 +118,20 @@ public class CampaignControllerTests
     }
     
     [Fact]
+    public void UpdateCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
+    {
+        const int id = 1;
+        var campaignDetails = new UpdateCampaignViewModel();
+        var controller = new CampaignsController(_campaignService, _mapper);
+
+        _campaignService.CampaignExists(id).Returns(false);
+
+        var actionResult = controller.UpdateCampaign(id, campaignDetails);
+
+        actionResult.Should().BeOfType<NotFoundResult>();
+    }
+    
+    [Fact]
     public void DeleteCampaign_WhenCalledWithValidId_DeletedAndSaved()
     {
         const int id = 1;
@@ -116,5 +143,18 @@ public class CampaignControllerTests
         
         actionResult.AssertResult<NoContentResult>();
         _campaignService.Received(1).DeleteCampaign(id);
+    }
+    
+    [Fact]
+    public void DeleteCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
+    {
+        const int id = 1;
+        var controller = new CampaignsController(_campaignService, _mapper);
+
+        _campaignService.CampaignExists(id).Returns(false);
+
+        var actionResult = controller.DeleteCampaign(id);
+
+        actionResult.Should().BeOfType<NotFoundResult>();
     }
 }

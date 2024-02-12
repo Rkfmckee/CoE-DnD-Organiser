@@ -22,9 +22,9 @@ public class CharactersController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<CharacterViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetCharacters()
+    public IActionResult GetCharacters([FromQuery] string name, [FromQuery] string race, [FromQuery] string @class)
     {
-        var charactersData = _characterService.GetCharacters();
+        var charactersData = _characterService.GetCharacters(name, race, @class);
         if (charactersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<CharacterViewModel>>(charactersData));

@@ -22,9 +22,9 @@ public class CampaignsController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
-    public ActionResult<IList<CampaignViewModel>> GetCampaigns()
+    public ActionResult<IList<CampaignViewModel>> GetCampaigns([FromQuery] string name, [FromQuery] string theme, [FromQuery] string writer)
     {
-        var campaignsData = _campaignService.GetCampaigns();
+        var campaignsData = _campaignService.GetCampaigns(name, theme, writer);
         if (campaignsData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<CampaignViewModel>>(campaignsData));

@@ -22,9 +22,9 @@ public class PlayersController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<PlayerViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetPlayers()
+    public IActionResult GetPlayers([FromQuery] string name, [FromQuery] string email)
     {
-        var playersData = _playerService.GetPlayers();
+        var playersData = _playerService.GetPlayers(name, email);
         if (playersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<PlayerViewModel>>(playersData));

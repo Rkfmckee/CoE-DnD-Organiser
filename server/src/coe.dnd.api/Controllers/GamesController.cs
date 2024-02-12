@@ -22,9 +22,9 @@ public class GamesController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<GameViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetGames()
+    public IActionResult GetGames([FromQuery] int? gameMasterId, [FromQuery] int? campaignId)
     {
-        var gamesData = _gameService.GetGames();
+        var gamesData = _gameService.GetGames(gameMasterId, campaignId);
         if (gamesData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<GameViewModel>>(gamesData));

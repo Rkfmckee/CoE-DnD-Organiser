@@ -52,7 +52,6 @@ public class CharacterService : ICharacterService
     public void UpdateCharacter(int id, CharacterDto characterData)
     {
         var character = GetCharacterObject(id);
-        characterData.PlayerId = 50;
         
         _mapper.Map(characterData, character);
         _database.SaveChanges();

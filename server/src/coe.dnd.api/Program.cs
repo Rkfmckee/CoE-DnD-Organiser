@@ -4,6 +4,7 @@ using coe.dnd.dal.Contexts;
 using coe.dnd.dal.Interfaces;
 using coe.dnd.services.Interfaces;
 using coe.dnd.services.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -30,6 +31,10 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAuthenticatedUser();
     });
 });
+
+builder.Services.AddFluentValidation(s =>
+    s.RegisterValidatorsFromAssemblyContaining<Program>()
+);
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

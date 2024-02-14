@@ -4,6 +4,7 @@ using coe.dnd.dal.Models;
 using coe.dnd.dal.Specifications.Characters;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Unosquare.EntityFramework.Specification.Common.Extensions;
 
 namespace coe.dnd.services.Services;
@@ -19,64 +20,64 @@ public class CharacterService : ICharacterService
         _mapper = mapper;
     }
 
-    public bool CharacterExists(int id)
+    public async Task<bool> CharacterExistsAsync(int id)
     {
-        return _database.Get<Character>()
+        return await _database.Get<Character>()
             .Where(new CharacterByIdSpec(id))
-            .Any();
+            .AnyAsync();
     }
     
-    public CharacterDto GetCharacter(int id)
+    public async Task<CharacterDto> GetCharacterAsync(int id)
     {
-        return _mapper
-            .ProjectTo<CharacterDto>(GetCharacterQueryable(id))
-            .SingleOrDefault();
+        return await _mapper
+            .ProjectTo<CharacterDto>(GetCharacterQuery(id))
+            .SingleOrDefaultAsync();
     }
     
-    public IList<CharacterDto> GetCharacters(string name = null, string race = null, string @class = null)
+    public async Task<IList<CharacterDto>> GetCharactersAsync(string name = null, string race = null, string @class = null)
     {
-        return _mapper
-            .ProjectTo<CharacterDto>(GetCharactersQueryable(name, race, @class))
-            .ToList();
+        return await _mapper
+            .ProjectTo<CharacterDto>(GetCharactersQuery(name, race, @class))
+            .ToListAsync();
     }
 
-    public void CreateCharacter(CharacterDto characterData)
+    public async Task CreateCharacterAsync(CharacterDto characterData)
     {
         var character = _mapper.Map<Character>(characterData);
         character.Created = DateTime.UtcNow;
         
         _database.Add(character);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void UpdateCharacter(int id, CharacterDto characterData)
+    public async Task UpdateCharacterAsync(int id, CharacterDto characterData)
     {
-        var character = GetCharacterObject(id);
+        var character = await GetCharacterFromQueryAsync(id);
         
         _mapper.Map(characterData, character);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void DeleteCharacter(int id)
+    public async Task DeleteCharacterAsync(int id)
     {
-        var character = GetCharacterObject(id);
+        var character = await GetCharacterFromQueryAsync(id);
         
         _database.Delete(character);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
     
-    private IQueryable<Character> GetCharacterQueryable(int id)
+    private IQueryable<Character> GetCharacterQuery(int id)
     {
         return _database.Get<Character>()
             .Where(new CharacterByIdSpec(id));
     }
     
-    private Character GetCharacterObject(int id)
+    private async Task<Character> GetCharacterFromQueryAsync(int id)
     {
-        return GetCharacterQueryable(id).SingleOrDefault();
+        return await GetCharacterQuery(id).SingleOrDefaultAsync();
     }
     
-    private IQueryable<Character> GetCharactersQueryable(string name = null, string race = null, string @class = null)
+    private IQueryable<Character> GetCharactersQuery(string name = null, string race = null, string @class = null)
     {
         return _database.Get<Character>()
             .Where(new CharacterSearchSpec(name, race, @class));

@@ -4,10 +4,10 @@ namespace coe.dnd.services.Interfaces;
 
 public interface IGameMasterService
 {
-    bool GameMasterExists(int id);
-    GameMasterDto GetGameMaster(int id);
-    IList<GameMasterDto> GetGameMasters();
-    void CreateGameMaster(GameMasterDto gameMasterData);
-    void UpdateGameMaster(int id, GameMasterDto gameMasterData);
-    void DeleteGameMaster(int id);
+    Task<bool> GameMasterExistsAsync(int id);
+    Task<GameMasterDto> GetGameMasterAsync(int id);
+    Task<IList<GameMasterDto>> GetGameMastersAsync();
+    Task CreateGameMasterAsync(GameMasterDto gameMasterData);
+    Task UpdateGameMasterAsync(int id, GameMasterDto gameMasterData);
+    Task DeleteGameMasterAsync(int id);
 }

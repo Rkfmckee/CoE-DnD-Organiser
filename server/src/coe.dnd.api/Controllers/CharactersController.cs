@@ -22,9 +22,9 @@ public class CharactersController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<CharacterViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetCharacters([FromQuery] string name, [FromQuery] string race, [FromQuery] string @class)
+    public async Task<IActionResult> GetCharacters([FromQuery] string name, [FromQuery] string race, [FromQuery] string @class)
     {
-        var charactersData = _characterService.GetCharacters(name, race, @class);
+        var charactersData = await _characterService.GetCharactersAsync(name, race, @class);
         if (charactersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<CharacterViewModel>>(charactersData));
@@ -33,21 +33,21 @@ public class CharactersController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CharacterViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetCharacter(int id)
+    public async Task<IActionResult> GetCharacter(int id)
     {
-        if (!_characterService.CharacterExists(id)) return NotFound();
+        if (!(await _characterService.CharacterExistsAsync(id))) return NotFound();
 
-        var characterData = _characterService.GetCharacter(id);
+        var characterData = await _characterService.GetCharacterAsync(id);
         
         return Ok(_mapper.Map<CharacterViewModel>(characterData));
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(CreateCharacterViewModel), StatusCodes.Status201Created)]
-    public IActionResult CreateCharacter(CreateCharacterViewModel characterDetails)
+    public async Task<IActionResult> CreateCharacter(CreateCharacterViewModel characterDetails)
     {
         var characterData = _mapper.Map<CharacterDto>(characterDetails);
-        _characterService.CreateCharacter(characterData);
+        await _characterService.CreateCharacterAsync(characterData);
         
         return CreatedAtAction(nameof(CreateCharacter), null);
     }
@@ -55,12 +55,12 @@ public class CharactersController : Controller
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult UpdateCharacter(int id, UpdateCharacterViewModel characterDetails)
+    public async Task<IActionResult> UpdateCharacter(int id, UpdateCharacterViewModel characterDetails)
     {
-        if (!_characterService.CharacterExists(id)) return NotFound();
+        if (!(await _characterService.CharacterExistsAsync(id))) return NotFound();
 
         var characterData = _mapper.Map<CharacterDto>(characterDetails);
-        _characterService.UpdateCharacter(id, characterData);
+        await _characterService.UpdateCharacterAsync(id, characterData);
         
         return Ok();
     }
@@ -68,11 +68,11 @@ public class CharactersController : Controller
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public IActionResult DeleteCharacter(int id)
+    public async Task<IActionResult> DeleteCharacter(int id)
     {
-        if (!_characterService.CharacterExists(id)) return NotFound();
+        if (!(await _characterService.CharacterExistsAsync(id))) return NotFound();
         
-        _characterService.DeleteCharacter(id);
+        await _characterService.DeleteCharacterAsync(id);
         
         return NoContent();
     }

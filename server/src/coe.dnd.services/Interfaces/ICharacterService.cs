@@ -4,10 +4,10 @@ namespace coe.dnd.services.Interfaces;
 
 public interface ICharacterService
 {
-    bool CharacterExists(int id);
-    CharacterDto GetCharacter(int id);
-    IList<CharacterDto> GetCharacters(string name = null, string race = null, string @class = null);
-    void CreateCharacter(CharacterDto characterData);
-    void UpdateCharacter(int id, CharacterDto characterData);
-    void DeleteCharacter(int id);
+    Task<bool> CharacterExistsAsync(int id);
+    Task<CharacterDto> GetCharacterAsync(int id);
+    Task<IList<CharacterDto>> GetCharactersAsync(string name = null, string race = null, string @class = null);
+    Task CreateCharacterAsync(CharacterDto characterData);
+    Task UpdateCharacterAsync(int id, CharacterDto characterData);
+    Task DeleteCharacterAsync(int id);
 }

@@ -4,6 +4,7 @@ using coe.dnd.dal.Models;
 using coe.dnd.dal.Specifications.GameMasters;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Unosquare.EntityFramework.Specification.Common.Extensions;
 
 namespace coe.dnd.services.Services;
@@ -11,74 +12,72 @@ namespace coe.dnd.services.Services;
 public class GameMasterService : IGameMasterService
 {
     private readonly IDndOrganiserDatabase _database;
-    private readonly IPlayerService _playerService;
     private readonly IMapper _mapper;
 
-    public GameMasterService(IDndOrganiserDatabase database, IPlayerService playerService, IMapper mapper)
+    public GameMasterService(IDndOrganiserDatabase database, IMapper mapper)
     {
         _database = database;
-        _playerService = playerService;
         _mapper = mapper;
     }
 
-    public bool GameMasterExists(int id)
+    public async Task<bool> GameMasterExistsAsync(int id)
     {
-        return _database.Get<GameMaster>()
+        return await _database.Get<GameMaster>()
             .Where(new GameMasterByIdSpec(id))
-            .Any();
+            .AnyAsync();
     }
     
-    public GameMasterDto GetGameMaster(int id)
+    public async Task<GameMasterDto> GetGameMasterAsync(int id)
     {
-        return _mapper
-            .ProjectTo<GameMasterDto>(GetGameMasterQueryable(id))
-            .SingleOrDefault();
+        return await _mapper
+            .ProjectTo<GameMasterDto>(GetGameMasterQuery(id))
+            .SingleOrDefaultAsync();
     }
     
-    public IList<GameMasterDto> GetGameMasters()
+    public async Task<IList<GameMasterDto>> GetGameMastersAsync()
     {
-        return _mapper
-            .ProjectTo<GameMasterDto>(GetGameMastersQueryable())
-            .ToList();
+        return await _mapper
+            .ProjectTo<GameMasterDto>(GetGameMastersQuery())
+            .ToListAsync();
     }
 
-    public void CreateGameMaster(GameMasterDto gameMasterData)
+    public async Task CreateGameMasterAsync(GameMasterDto gameMasterData)
     {
         var gameMaster = _mapper.Map<GameMaster>(gameMasterData);
         gameMaster.Created = DateTime.UtcNow;
         
         _database.Add(gameMaster);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void UpdateGameMaster(int id, GameMasterDto gameMasterData)
+    public async Task UpdateGameMasterAsync(int id, GameMasterDto gameMasterData)
     {
-        var gameMaster = GetGameMasterObject(id);
+        var gameMaster = await GetGameMasterFromQueryAsync(id);
         
         _mapper.Map(gameMasterData, gameMaster);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void DeleteGameMaster(int id)
+    public async Task DeleteGameMasterAsync(int id)
     {
-        var gameMaster = GetGameMasterObject(id);
+        var gameMaster = await GetGameMasterFromQueryAsync(id);
         
         _database.Delete(gameMaster);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
     
-    private IQueryable<GameMaster> GetGameMasterQueryable(int id)
+    private IQueryable<GameMaster> GetGameMasterQuery(int id)
     {
         return _database.Get<GameMaster>()
             .Where(new GameMasterByIdSpec(id));
     }
     
-    private GameMaster GetGameMasterObject(int id)
+    private async Task<GameMaster> GetGameMasterFromQueryAsync(int id)
     {
-        return GetGameMasterQueryable(id).SingleOrDefault();
+        return await GetGameMasterQuery(id).SingleOrDefaultAsync();
     }
     
-    private IQueryable<GameMaster> GetGameMastersQueryable()
+    private IQueryable<GameMaster> GetGameMastersQuery()
     {
         return _database.Get<GameMaster>();
     }

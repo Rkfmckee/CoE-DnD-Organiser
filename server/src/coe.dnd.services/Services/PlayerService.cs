@@ -4,6 +4,7 @@ using coe.dnd.dal.Models;
 using coe.dnd.dal.Specifications.Players;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Unosquare.EntityFramework.Specification.Common.Extensions;
 
 namespace coe.dnd.services.Services;
@@ -19,68 +20,68 @@ public class PlayerService : IPlayerService
         _mapper = mapper;
     }
 
-    public bool PlayerExists(int id)
+    public async Task<bool> PlayerExistsAsync(int id)
     {
-        return _database.Get<Player>()
+        return await _database.Get<Player>()
             .Where(new PlayerByIdSpec(id))
-            .Any();
+            .AnyAsync();
     }
     
-    public PlayerDto GetPlayer(int id)
+    public async Task<PlayerDto> GetPlayerAsync(int id)
     {
-        return _mapper
-            .ProjectTo<PlayerDto>(GetPlayerQueryable(id))
-            .SingleOrDefault();
+        return await _mapper
+            .ProjectTo<PlayerDto>(GetPlayerQuery(id))
+            .SingleOrDefaultAsync();
     }
     
-    public IList<PlayerDto> GetPlayers(string name = null, string email = null)
+    public async Task<IList<PlayerDto>> GetPlayersAsync(string name = null, string email = null)
     {
-        return _mapper
-            .ProjectTo<PlayerDto>(GetPlayersQueryable(name, email))
-            .ToList();
+        return await _mapper
+            .ProjectTo<PlayerDto>(GetPlayersQuery(name, email))
+            .ToListAsync();
     }
 
-    public void CreatePlayer(PlayerDto playerData)
+    public async Task CreatePlayerAsync(PlayerDto playerData)
     {
         var player = _mapper.Map<Player>(playerData);
         player.Created = DateTime.UtcNow;
         player.Password = BCrypt.Net.BCrypt.HashPassword(player.Password);
         
         _database.Add(player);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void UpdatePlayer(int id, PlayerDto playerData)
+    public async Task UpdatePlayerAsync(int id, PlayerDto playerData)
     {
-        var player = GetPlayerObject(id);
+        var player = await GetPlayerFromQueryAsync(id);
         
         if (!string.IsNullOrEmpty(playerData.Password))
             playerData.Password = BCrypt.Net.BCrypt.HashPassword(playerData.Password);
         
         _mapper.Map(playerData, player);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void DeletePlayer(int id)
+    public async Task DeletePlayerAsync(int id)
     {
-        var player = GetPlayerObject(id);
+        var player = await GetPlayerFromQueryAsync(id);
         
         _database.Delete(player);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
     
-    private IQueryable<Player> GetPlayerQueryable(int id)
+    private IQueryable<Player> GetPlayerQuery(int id)
     {
         return _database.Get<Player>()
             .Where(new PlayerByIdSpec(id));
     }
     
-    private Player GetPlayerObject(int id)
+    private async Task<Player> GetPlayerFromQueryAsync(int id)
     {
-        return GetPlayerQueryable(id).SingleOrDefault();
+        return await GetPlayerQuery(id).SingleOrDefaultAsync();
     }
     
-    private IQueryable<Player> GetPlayersQueryable(string name = null, string email = null)
+    private IQueryable<Player> GetPlayersQuery(string name = null, string email = null)
     {
         return _database.Get<Player>()
             .Where(new PlayerSearchSpec(name, email));

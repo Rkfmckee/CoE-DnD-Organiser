@@ -40,9 +40,9 @@ public class AuthenticationController : Controller
     }
     
     [HttpGet]
-    public ActionResult<AuthenticationResultViewModel> Refresh([FromServices] IAuthorizedPlayerProvider authorizedPlayerProvider)
+    public async Task<ActionResult<AuthenticationResultViewModel>> Refresh([FromServices] IAuthorizedPlayerProvider authorizedPlayerProvider)
     {
-        var player = authorizedPlayerProvider.GetLoggedInPlayer();
+        var player = await authorizedPlayerProvider.GetLoggedInPlayer();
         if (player == null) return Unauthorized();
         
         return new AuthenticationResultViewModel

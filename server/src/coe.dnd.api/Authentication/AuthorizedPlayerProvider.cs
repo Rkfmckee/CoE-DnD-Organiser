@@ -16,7 +16,7 @@ public class AuthorizedAccountProvider : IAuthorizedPlayerProvider
         _contextAccessor = contextAccessor;
     }
     
-    public PlayerDto GetLoggedInPlayer()
+    public async Task<PlayerDto> GetLoggedInPlayer()
     {
         if (_player != null) return _player;
 
@@ -24,7 +24,7 @@ public class AuthorizedAccountProvider : IAuthorizedPlayerProvider
 
         if (string.IsNullOrWhiteSpace(identifier)) return null;
 
-        _player = _playerService.GetPlayer(int.Parse(identifier));
+        _player = await _playerService.GetPlayerAsync(int.Parse(identifier));
 
         return _player;
     }
@@ -32,5 +32,5 @@ public class AuthorizedAccountProvider : IAuthorizedPlayerProvider
 
 public interface IAuthorizedPlayerProvider
 {
-    PlayerDto GetLoggedInPlayer();
+    Task<PlayerDto> GetLoggedInPlayer();
 }

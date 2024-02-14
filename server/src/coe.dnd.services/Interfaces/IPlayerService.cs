@@ -4,10 +4,10 @@ namespace coe.dnd.services.Interfaces;
 
 public interface IPlayerService
 {
-    bool PlayerExists(int id);
-    PlayerDto GetPlayer(int id);
-    IList<PlayerDto> GetPlayers(string name = null, string email = null);
-    void CreatePlayer(PlayerDto playerData);
-    void UpdatePlayer(int id, PlayerDto playerData);
-    void DeletePlayer(int id);
+    Task<bool> PlayerExistsAsync(int id);
+    Task<PlayerDto> GetPlayerAsync(int id);
+    Task<IList<PlayerDto>> GetPlayersAsync(string name = null, string email = null);
+    Task CreatePlayerAsync(PlayerDto playerData);
+    Task UpdatePlayerAsync(int id, PlayerDto playerData);
+    Task DeletePlayerAsync(int id);
 }

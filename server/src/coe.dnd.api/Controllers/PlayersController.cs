@@ -22,9 +22,9 @@ public class PlayersController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<PlayerViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetPlayers([FromQuery] string name, [FromQuery] string email)
+    public async Task<IActionResult> GetPlayers([FromQuery] string name, [FromQuery] string email)
     {
-        var playersData = _playerService.GetPlayers(name, email);
+        var playersData = await _playerService.GetPlayersAsync(name, email);
         if (playersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<PlayerViewModel>>(playersData));
@@ -33,21 +33,21 @@ public class PlayersController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(PlayerViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetPlayer(int id)
+    public async Task<IActionResult> GetPlayer(int id)
     {
-        if (!_playerService.PlayerExists(id)) return NotFound();
+        if (!(await _playerService.PlayerExistsAsync(id))) return NotFound();
 
-        var playerData = _playerService.GetPlayer(id);
+        var playerData = await _playerService.GetPlayerAsync(id);
         
         return Ok(_mapper.Map<PlayerViewModel>(playerData));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public IActionResult CreatePlayer(CreatePlayerViewModel playerDetails)
+    public async Task<IActionResult> CreatePlayer(CreatePlayerViewModel playerDetails)
     {
         var playerData = _mapper.Map<PlayerDto>(playerDetails);
-        _playerService.CreatePlayer(playerData);
+        await _playerService.CreatePlayerAsync(playerData);
         
         return CreatedAtAction(nameof(CreatePlayer), null);
     }
@@ -55,12 +55,12 @@ public class PlayersController : Controller
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult UpdatePlayer(int id, UpdatePlayerViewModel playerDetails)
+    public async Task<IActionResult> UpdatePlayer(int id, UpdatePlayerViewModel playerDetails)
     {
-        if (!_playerService.PlayerExists(id)) return NotFound();
+        if (!(await _playerService.PlayerExistsAsync(id))) return NotFound();
 
         var playerData = _mapper.Map<PlayerDto>(playerDetails);
-        _playerService.UpdatePlayer(id, playerData);
+        await _playerService.UpdatePlayerAsync(id, playerData);
         
         return Ok();
     }
@@ -68,11 +68,11 @@ public class PlayersController : Controller
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public IActionResult DeletePlayer(int id)
+    public async Task<IActionResult> DeletePlayer(int id)
     {
-        if (!_playerService.PlayerExists(id)) return NotFound();
+        if (!(await _playerService.PlayerExistsAsync(id))) return NotFound();
         
-        _playerService.DeletePlayer(id);
+        await _playerService.DeletePlayerAsync(id);
         
         return NoContent();
     }

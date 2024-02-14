@@ -24,9 +24,9 @@ public class GameMastersController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<GameMasterViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetGameMasters()
+    public async Task<IActionResult> GetGameMasters()
     {
-        var gameMastersData = _gameMasterService.GetGameMasters();
+        var gameMastersData = await _gameMasterService.GetGameMastersAsync();
         if (gameMastersData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<GameMasterViewModel>>(gameMastersData));
@@ -35,11 +35,11 @@ public class GameMastersController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GameMasterViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetGameMaster(int id)
+    public async Task<IActionResult> GetGameMaster(int id)
     {
-        if (!_gameMasterService.GameMasterExists(id)) return NotFound();
+        if (!(await _gameMasterService.GameMasterExistsAsync(id))) return NotFound();
         
-        var gameMasterData = _gameMasterService.GetGameMaster(id);
+        var gameMasterData = await _gameMasterService.GetGameMasterAsync(id);
         
         return Ok(_mapper.Map<GameMasterViewModel>(gameMasterData));
     }
@@ -47,13 +47,13 @@ public class GameMastersController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CreateGameMasterViewModel), StatusCodes.Status201Created)]
-    public IActionResult CreateGameMaster(CreateGameMasterViewModel gameMasterDetails)
+    public async Task<IActionResult> CreateGameMaster(CreateGameMasterViewModel gameMasterDetails)
     {
-        if (!_playerService.PlayerExists(gameMasterDetails.PlayerId)) 
+        if (!(await _playerService.PlayerExistsAsync(gameMasterDetails.PlayerId)))
             return NotFound("GameMaster can only be created if linked to a valid PlayerId");
         
         var gameMasterData = _mapper.Map<GameMasterDto>(gameMasterDetails);
-        _gameMasterService.CreateGameMaster(gameMasterData);
+        await _gameMasterService.CreateGameMasterAsync(gameMasterData);
         
         return CreatedAtAction(nameof(CreateGameMaster), null);
     }
@@ -61,12 +61,12 @@ public class GameMastersController : Controller
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult UpdateGameMaster(int id, UpdateGameMasterViewModel gameMasterDetails)
+    public async Task<IActionResult> UpdateGameMaster(int id, UpdateGameMasterViewModel gameMasterDetails)
     {
-        if (!_gameMasterService.GameMasterExists(id)) return NotFound();
+        if (!(await _gameMasterService.GameMasterExistsAsync(id))) return NotFound();
 
         var gameMasterData = _mapper.Map<GameMasterDto>(gameMasterDetails);
-        _gameMasterService.UpdateGameMaster(id, gameMasterData);
+        await _gameMasterService.UpdateGameMasterAsync(id, gameMasterData);
         
         return Ok();
     }
@@ -74,11 +74,11 @@ public class GameMastersController : Controller
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public IActionResult DeleteGameMaster(int id)
+    public async Task<IActionResult> DeleteGameMaster(int id)
     {
-        if (!_gameMasterService.GameMasterExists(id)) return NotFound();
+        if (!(await _gameMasterService.GameMasterExistsAsync(id))) return NotFound();
         
-        _gameMasterService.DeleteGameMaster(id);
+        await _gameMasterService.DeleteGameMasterAsync(id);
         
         return NoContent();
     }

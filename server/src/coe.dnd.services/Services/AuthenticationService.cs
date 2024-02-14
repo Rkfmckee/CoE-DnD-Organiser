@@ -1,5 +1,6 @@
 using AutoMapper;
 using coe.dnd.dal.Contexts;
+using coe.dnd.dal.Interfaces;
 using coe.dnd.dal.Models;
 using coe.dnd.dal.Specifications.Players;
 using coe.dnd.services.DataTransferObjects;
@@ -11,10 +12,10 @@ namespace coe.dnd.services.Services;
 
 public class AuthenticationService: IAuthenticationService
 {
-    private readonly DndOrganiserContext _database;
+    private readonly IDndOrganiserDatabase _database;
     private readonly IMapper _mapper;
 
-    public AuthenticationService(DndOrganiserContext database, IMapper mapper)
+    public AuthenticationService(IDndOrganiserDatabase database, IMapper mapper)
     {
         _database = database;
         _mapper = mapper;
@@ -28,6 +29,4 @@ public class AuthenticationService: IAuthenticationService
 
         return _mapper.Map<PlayerDto>(player);
     }
-
-    
 }

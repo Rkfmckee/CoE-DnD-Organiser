@@ -1,7 +1,6 @@
 using AutoMapper;
 using coe.dnd.dal.Models;
 using coe.dnd.services.DataTransferObjects;
-using coe.dnd.services.Extensions;
 
 namespace coe.dnd.services.Profiles;
 
@@ -13,7 +12,17 @@ public class GameProfile : Profile
 
         CreateMap<GameDto, Game>()
             .ForMember(d => d.Id, o => o.Ignore())
-            .IgnoreAllNull();
+            .ForMember(d => d.GameMasterId, o =>
+            {
+                o.PreCondition(src => src.GameMasterId != null);
+                o.MapFrom(src => src.GameMasterId);
+            })
+            .ForMember(d => d.CampaignId, o =>
+            {
+                o.PreCondition(src => src.CampaignId != null);
+                o.MapFrom(src => src.CampaignId);
+            });;
+        
         CreateMap<GameDto, GameCharacter>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.GameId, o => o.MapFrom(x => x.Id));

@@ -18,11 +18,11 @@ public partial class GameMaster
 
     [Column("player_id")]
     public int PlayerId { get; set; }
+    
+    [ForeignKey(nameof(PlayerId))]
+    [InverseProperty("GameMasters")]
+    public virtual Player Player { get; set; }
 
     [InverseProperty("GameMaster")]
     public virtual ICollection<Game> Games { get; set; } = new List<Game>();
-
-    [ForeignKey("PlayerId")]
-    [InverseProperty("GameMasters")]
-    public virtual Player Player { get; set; }
 }

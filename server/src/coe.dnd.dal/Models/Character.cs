@@ -27,11 +27,11 @@ public partial class Character
 
     [Column("player_id")]
     public int PlayerId { get; set; }
+    
+    [ForeignKey(nameof(PlayerId))]
+    [InverseProperty("Characters")]
+    public virtual Player Player { get; set; }
 
     [InverseProperty("Character")]
     public virtual ICollection<GameCharacter> GameCharacters { get; set; } = new List<GameCharacter>();
-
-    [ForeignKey("PlayerId")]
-    [InverseProperty("Characters")]
-    public virtual Player Player { get; set; }
 }

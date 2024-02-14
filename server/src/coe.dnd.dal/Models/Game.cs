@@ -18,18 +18,18 @@ public partial class Game
 
     [Column("game_master_id")]
     public int GameMasterId { get; set; }
+    
+    [ForeignKey(nameof(GameMasterId))]
+    [InverseProperty("Games")]
+    public virtual GameMaster GameMaster { get; set; }
 
     [Column("campaign_id")]
     public int? CampaignId { get; set; }
 
-    [ForeignKey("CampaignId")]
+    [ForeignKey(nameof(CampaignId))]
     [InverseProperty("Games")]
     public virtual Campaign Campaign { get; set; }
 
     [InverseProperty("Game")]
     public virtual ICollection<GameCharacter> GameCharacters { get; set; } = new List<GameCharacter>();
-
-    [ForeignKey("GameMasterId")]
-    [InverseProperty("Games")]
-    public virtual GameMaster GameMaster { get; set; }
 }

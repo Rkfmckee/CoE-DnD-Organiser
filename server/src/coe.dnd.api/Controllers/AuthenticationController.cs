@@ -18,11 +18,13 @@ public class AuthenticationController : Controller
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper)
+    public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper, IConfiguration configuration)
     {
         _authenticationService = authenticationService;
         _mapper = mapper;
+        _configuration = configuration;
     }
     
     [HttpPost]
@@ -54,7 +56,9 @@ public class AuthenticationController : Controller
     
     private string GenerateToken(PlayerDto player, int expirationTimeInMinutes, TokenTypes tokenType)
     {
-        var secretKey = Encoding.UTF8.GetBytes(tokenType == TokenTypes.AccessToken ? "JWTMySonTheDayYouWereBorn" : "JWTForestsWhisperedYourName");
+        var secretKey = Encoding.UTF8.GetBytes(tokenType == TokenTypes.AccessToken ? 
+            _configuration.GetValue<string>("JwtStrings:AccessToken") : 
+            _configuration.GetValue<string>("JwtStrings:RefreshToken"));
         var securityKey = new SymmetricSecurityKey(secretKey);
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var expiryTime = DateTime.UtcNow.AddMinutes(expirationTimeInMinutes);

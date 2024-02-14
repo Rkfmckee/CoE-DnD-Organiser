@@ -2,6 +2,7 @@ using AutoMapper;
 using coe.dnd.api.ViewModels.Players;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coe.dnd.api.Controllers;
@@ -43,6 +44,7 @@ public class PlayersController : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreatePlayer(CreatePlayerViewModel playerDetails)
     {

@@ -24,33 +24,33 @@ public class CampaignControllerTests
     }
 
     [Fact]
-    public void GetCampaign_WhenCampaignFound_MapsAndReturns()
+    public async Task GetCampaign_WhenCampaignFound_MapsAndReturns()
     {
         const int id = 1;
         var campaign = new CampaignDto { Id = id };
         var campaignViewModel = new CampaignViewModel();
         var controller = new CampaignsController(_campaignService, _mapper);
 
-        _campaignService.CampaignExists(id).Returns(true);
-        _campaignService.GetCampaign(id).Returns(campaign);
+        _campaignService.CampaignExistsAsync(id).Returns(true);
+        _campaignService.GetCampaignAsync(id).Returns(campaign);
         _mapper.Map<CampaignViewModel>(campaign).Returns(campaignViewModel);
 
-        var actionResult = controller.GetCampaign(id);
+        var actionResult = await controller.GetCampaign(id);
 
         actionResult.AssertObjectResult<CampaignViewModel, OkObjectResult>().Should().BeSameAs(campaignViewModel);
-        _campaignService.Received(1).GetCampaign(id);
+        await _campaignService.Received(1).GetCampaignAsync(id);
         _mapper.Received(1).Map<CampaignViewModel>(campaign);
     }
     
     [Fact]
-    public void GetCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
+    public async Task GetCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
     {
         const int id = 1;
         var controller = new CampaignsController(_campaignService, _mapper);
 
-        _campaignService.CampaignExists(id).Returns(false);
+        _campaignService.CampaignExistsAsync(id).Returns(false);
 
-        var actionResult = controller.GetCampaign(id).Result;
+        var actionResult = (await controller.GetCampaign(id)).Result;
 
         actionResult.Should().BeOfType<NotFoundResult>();
     }
@@ -58,7 +58,7 @@ public class CampaignControllerTests
     [Theory]
     [InlineData("campaignName", "campaignTheme", "writerName")]
     [InlineData(null, null, null)]
-    public void GetCampaigns_WhenCampaignsFound_MapsAndReturns(string name, string theme, string writer)
+    public async Task GetCampaigns_WhenCampaignsFound_MapsAndReturns(string name, string theme, string writer)
     {
         const int id1 = 1;
         const int id2 = 2;
@@ -70,19 +70,19 @@ public class CampaignControllerTests
         var campaignViewModels = new List<CampaignViewModel>();
         var controller = new CampaignsController(_campaignService, _mapper);
         
-        _campaignService.GetCampaigns(name, theme, writer).Returns(campaigns);
+        _campaignService.GetCampaignsAsync(name, theme, writer).Returns(campaigns);
         _mapper.Map<IList<CampaignViewModel>>(campaigns).Returns(campaignViewModels);
         
-        var actionResult = controller.GetCampaigns(name, theme, writer);
+        var actionResult = await controller.GetCampaigns(name, theme, writer);
         
         actionResult.AssertObjectResult<IList<CampaignViewModel>, OkObjectResult>().Should().BeSameAs(campaignViewModels);
-        _campaignService.Received(1).GetCampaigns(name, theme, writer);
+        await _campaignService.Received(1).GetCampaignsAsync(name, theme, writer);
         _mapper.Received(1).Map<IList<CampaignViewModel>>(campaigns);
     }
 
     [Theory]
     [InlineData("campaignName", "campaignTheme", "campaignDetails", "writerName")]
-    public void CreateCampaign_WhenValidDataEntered_MappedAndSaved(string name, string theme, string details,
+    public async Task CreateCampaign_WhenValidDataEntered_MappedAndSaved(string name, string theme, string details,
         string writer)
     {
         var campaign = new CampaignDto { Name = name, Theme = theme, Details = details, Writer = writer };
@@ -91,69 +91,69 @@ public class CampaignControllerTests
         
         _mapper.Map<CampaignDto>(createCampaignViewModel).Returns(campaign);
         
-        var actionResult = controller.CreateCampaign(createCampaignViewModel);
+        var actionResult = await controller.CreateCampaign(createCampaignViewModel);
 
         actionResult.AssertObjectResult<CreatedAtActionResult>();
-        _campaignService.Received(1).CreateCampaign(campaign);
+        await _campaignService.Received(1).CreateCampaignAsync(campaign);
         _mapper.Received(1).Map<CampaignDto>(createCampaignViewModel);
     }
     
     [Theory]
     [InlineData(1, "campaignName", "campaignTheme", "campaignDetails", "writerName")]
-    public void UpdateCampaign_WhenValidDataEntered_MappedAndSaved(int id, string name, string theme, string details,
+    public async Task UpdateCampaign_WhenValidDataEntered_MappedAndSaved(int id, string name, string theme, string details,
         string writer)
     {
         var campaign = new CampaignDto { Name = name, Theme = theme, Details = details, Writer = writer };
         var updateCampaignViewModel = new UpdateCampaignViewModel();
         var controller = new CampaignsController(_campaignService, _mapper);
         
-        _campaignService.CampaignExists(id).Returns(true);
+        _campaignService.CampaignExistsAsync(id).Returns(true);
         _mapper.Map<CampaignDto>(updateCampaignViewModel).Returns(campaign);
         
-        var actionResult = controller.UpdateCampaign(id, updateCampaignViewModel);
+        var actionResult = await controller.UpdateCampaign(id, updateCampaignViewModel);
 
         actionResult.AssertResult<OkResult>();
-        _campaignService.Received(1).UpdateCampaign(id, campaign);
+        await _campaignService.Received(1).UpdateCampaignAsync(id, campaign);
         _mapper.Received(1).Map<CampaignDto>(updateCampaignViewModel);
     }
     
     [Fact]
-    public void UpdateCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
+    public async Task UpdateCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
     {
         const int id = 1;
         var campaignDetails = new UpdateCampaignViewModel();
         var controller = new CampaignsController(_campaignService, _mapper);
 
-        _campaignService.CampaignExists(id).Returns(false);
+        _campaignService.CampaignExistsAsync(id).Returns(false);
 
-        var actionResult = controller.UpdateCampaign(id, campaignDetails);
+        var actionResult = await controller.UpdateCampaign(id, campaignDetails);
 
         actionResult.Should().BeOfType<NotFoundResult>();
     }
     
     [Fact]
-    public void DeleteCampaign_WhenCalledWithValidId_DeletedAndSaved()
+    public async Task DeleteCampaign_WhenCalledWithValidId_DeletedAndSaved()
     {
         const int id = 1;
         var controller = new CampaignsController(_campaignService, _mapper);
 
-        _campaignService.CampaignExists(id).Returns(true);
+        _campaignService.CampaignExistsAsync(id).Returns(true);
         
-        var actionResult = controller.DeleteCampaign(id);
+        var actionResult = await controller.DeleteCampaign(id);
         
         actionResult.AssertResult<NoContentResult>();
-        _campaignService.Received(1).DeleteCampaign(id);
+        await _campaignService.Received(1).DeleteCampaignAsync(id);
     }
     
     [Fact]
-    public void DeleteCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
+    public async Task DeleteCampaign_WhenCampaignDoesntExist_ReturnsNotFound()
     {
         const int id = 1;
         var controller = new CampaignsController(_campaignService, _mapper);
 
-        _campaignService.CampaignExists(id).Returns(false);
+        _campaignService.CampaignExistsAsync(id).Returns(false);
 
-        var actionResult = controller.DeleteCampaign(id);
+        var actionResult = await controller.DeleteCampaign(id);
 
         actionResult.Should().BeOfType<NotFoundResult>();
     }

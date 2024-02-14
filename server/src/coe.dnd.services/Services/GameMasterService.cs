@@ -45,7 +45,7 @@ public class GameMasterService : IGameMasterService
     public void CreateGameMaster(GameMasterDto gameMasterData)
     {
         var gameMaster = _mapper.Map<GameMaster>(gameMasterData);
-        gameMaster.Created = DateTime.Now;
+        gameMaster.Created = DateTime.UtcNow;
         
         _database.Add(gameMaster);
         _database.SaveChanges();

@@ -4,10 +4,10 @@ namespace coe.dnd.services.Interfaces;
 
 public interface IGameService
 {
-    bool GameExists(int id);
-    GameDto GetGame(int id);
-    IList<GameDto> GetGames(int? gameMasterId = null, int? campaignId = null);
-    void CreateGame(GameDto gameData);
-    void UpdateGame(int id, GameDto gameData);
-    void DeleteGame(int id);
+    Task<bool> GameExistsAsync(int id);
+    Task<GameDto>  GetGameAsync(int id);
+    Task<IList<GameDto>> GetGamesAsync(int? gameMasterId = null, int? campaignId = null);
+    Task CreateGameAsync(GameDto gameData);
+    Task UpdateGameAsync(int id, GameDto gameData);
+    Task DeleteGameAsync(int id);
 }

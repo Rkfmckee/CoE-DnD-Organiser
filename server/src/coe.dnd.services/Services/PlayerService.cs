@@ -43,7 +43,7 @@ public class PlayerService : IPlayerService
     public void CreatePlayer(PlayerDto playerData)
     {
         var player = _mapper.Map<Player>(playerData);
-        player.Created = DateTime.Now;
+        player.Created = DateTime.UtcNow;
         player.Password = BCrypt.Net.BCrypt.HashPassword(player.Password);
         
         _database.Add(player);

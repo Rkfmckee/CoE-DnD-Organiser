@@ -22,9 +22,9 @@ public class CampaignsController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<CampaignViewModel>), StatusCodes.Status200OK)]
-    public ActionResult<IList<CampaignViewModel>> GetCampaigns([FromQuery] string name, [FromQuery] string theme, [FromQuery] string writer)
+    public async Task<ActionResult<IList<CampaignViewModel>>> GetCampaigns([FromQuery] string name, [FromQuery] string theme, [FromQuery] string writer)
     {
-        var campaignsData = _campaignService.GetCampaigns(name, theme, writer);
+        var campaignsData = await _campaignService.GetCampaignsAsync(name, theme, writer);
         if (campaignsData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<CampaignViewModel>>(campaignsData));
@@ -33,21 +33,21 @@ public class CampaignsController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(CampaignViewModel), StatusCodes.Status200OK)]
-    public ActionResult<CampaignViewModel> GetCampaign(int id)
+    public async Task<ActionResult<CampaignViewModel>> GetCampaign(int id)
     {
-        if (!_campaignService.CampaignExists(id)) return NotFound();
+        if (!(await _campaignService.CampaignExistsAsync(id))) return NotFound();
 
-        var campaignData = _campaignService.GetCampaign(id);
+        var campaignData = await _campaignService.GetCampaignAsync(id);
         
         return Ok(_mapper.Map<CampaignViewModel>(campaignData));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public ActionResult CreateCampaign(CreateCampaignViewModel campaignDetails)
+    public async Task<ActionResult> CreateCampaign(CreateCampaignViewModel campaignDetails)
     {
         var campaignData = _mapper.Map<CampaignDto>(campaignDetails);
-        _campaignService.CreateCampaign(campaignData);
+        await _campaignService.CreateCampaignAsync(campaignData);
         
         return CreatedAtAction(nameof(CreateCampaign), null);
     }
@@ -55,12 +55,12 @@ public class CampaignsController : Controller
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
+    public async Task<ActionResult> UpdateCampaign(int id, UpdateCampaignViewModel campaignDetails)
     {
-        if (!_campaignService.CampaignExists(id)) return NotFound();
+        if (!(await _campaignService.CampaignExistsAsync(id))) return NotFound();
 
         var campaignData = _mapper.Map<CampaignDto>(campaignDetails);
-        _campaignService.UpdateCampaign(id, campaignData);
+        await _campaignService.UpdateCampaignAsync(id, campaignData);
         
         return Ok();
     }
@@ -68,11 +68,11 @@ public class CampaignsController : Controller
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult DeleteCampaign(int id)
+    public async Task<ActionResult> DeleteCampaign(int id)
     {
-        if (!_campaignService.CampaignExists(id)) return NotFound();
+        if (!(await _campaignService.CampaignExistsAsync(id))) return NotFound();
         
-        _campaignService.DeleteCampaign(id);
+        await _campaignService.DeleteCampaignAsync(id);
         
         return NoContent();
     }

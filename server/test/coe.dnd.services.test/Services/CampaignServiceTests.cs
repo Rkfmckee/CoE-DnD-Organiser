@@ -6,6 +6,7 @@ using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Profiles;
 using coe.dnd.services.Services;
 using FluentAssertions;
+using MockQueryable.NSubstitute;
 using NSubstitute;
 
 namespace coe.dnd.services.test.Services;
@@ -28,50 +29,50 @@ public class CampaignServiceTests
     }
     
     [Fact]
-    public void CampaignExists_WhenCampaignExists_ReturnsTrue()
+    public async Task CampaignExists_WhenCampaignExists_ReturnsTrue()
     {
         const int id = 1;
         var campaign = new Campaign() { Id = id };
         var campaigns = new List<Campaign> { campaign };
         var campaignService = new CampaignService(_database, _mapper);
         
-        _database.Get<Campaign>().Returns(campaigns.AsQueryable());
+        _database.Get<Campaign>().Returns(campaigns.AsQueryable().BuildMock());
 
-        var result = campaignService.CampaignExists(id);
+        var result = await campaignService.CampaignExistsAsync(id);
 
         result.Should().BeTrue();
     }
     
     [Fact]
-    public void GetCampaign_WhenCampaignExists_ReturnsAccount()
+    public async Task GetCampaign_WhenCampaignExists_ReturnsAccount()
     {
         const int id = 1;
         var campaign = new Campaign() { Id = id };
         var campaigns = new List<Campaign> { campaign };
         var campaignService = new CampaignService(_database, _mapper);
         
-        _database.Get<Campaign>().Returns(campaigns.AsQueryable());
+        _database.Get<Campaign>().Returns(campaigns.AsQueryable().BuildMock());
 
-        var result = campaignService.GetCampaign(id);
+        var result = await campaignService.GetCampaignAsync(id);
         
         result.Should().BeEquivalentTo(campaign, options => options.ExcludingMissingMembers());
     }
     
     [Fact]
-    public void GetAccounts_WhenCampaignsExist_ReturnsAccountList()
+    public async Task GetAccounts_WhenCampaignsExist_ReturnsAccountList()
     {
         var campaignList = _fixture.Build<Campaign>().Without(c => c.Games).CreateMany();
         var campaignService = new CampaignService(_database, _mapper);
 
-        _database.Get<Campaign>().Returns(campaignList.AsQueryable());
+        _database.Get<Campaign>().Returns(campaignList.AsQueryable().BuildMock());
         
-        var result = campaignService.GetCampaigns();
+        var result = await campaignService.GetCampaignsAsync();
         
         result.Should().BeEquivalentTo(campaignList, options => options.ExcludingMissingMembers());
     }
     
     [Fact]
-    public void CreateCampaign_ValidDataEntered_MappedAndSaved()
+    public async Task CreateCampaign_ValidDataEntered_MappedAndSaved()
     {
         const int id = 1;
 
@@ -86,46 +87,46 @@ public class CampaignServiceTests
         var campaignService = new CampaignService(_database, _mapper);
 
         // Act
-        campaignService.CreateCampaign(campaign);
+        await campaignService.CreateCampaignAsync(campaign);
         
         // Assert
-        _database.Received(1).SaveChanges();
+        await _database.Received(1).SaveChangesAsync();
         _database.Received(1).Add(Arg.Is<Campaign>(x => x.Name == campaign.Name));
     }
     
     [Theory]
     [InlineData("Campaign name", "Campaign theme", "Campaign details", "Writer name")]
     [InlineData(null, null, null, null)]
-    public void UpdateCampaign_ValidDataEntered_MappedAndSaved(string name, string theme, string details, string writer)
+    public async Task UpdateCampaign_ValidDataEntered_MappedAndSaved(string name, string theme, string details, string writer)
     {
         var campaigns = _fixture.Build<Campaign>().Without(x => x.Games).CreateMany();
         var campaign = campaigns.First();
         var campaignData = _mapper.Map<CampaignDto>(campaigns.First());
         var campaignService = new CampaignService(_database, _mapper);
         
-        _database.Get<Campaign>().Returns(campaigns.AsQueryable());
+        _database.Get<Campaign>().Returns(campaigns.AsQueryable().BuildMock());
         _database.When(database => database.SaveChanges()).Do(info =>
         {
             campaigns.First().Should().BeEquivalentTo(campaignData, options => options.ExcludingMissingMembers());
         });
         
-        campaignService.UpdateCampaign(campaign.Id, campaignData);
+        await campaignService.UpdateCampaignAsync(campaign.Id, campaignData);
         
-        _database.Received(1).SaveChanges();
+        await _database.Received(1).SaveChangesAsync();
     }
     
     [Fact]
-    public void DeleteCampaign_ValidIdEntered_MappedAndSaved()
+    public async Task DeleteCampaign_ValidIdEntered_MappedAndSaved()
     {
         var campaigns = _fixture.Build<Campaign>().Without(x => x.Games).CreateMany();
         var campaignService = new CampaignService(_database, _mapper);
 
-        _database.Get<Campaign>().Returns(campaigns.AsQueryable());
+        _database.Get<Campaign>().Returns(campaigns.AsQueryable().BuildMock());
         
-        campaignService.DeleteCampaign(campaigns.First().Id);
+        await campaignService.DeleteCampaignAsync(campaigns.First().Id);
         
         _database.Received(1).Get<Campaign>();
         _database.Received(1).Delete(campaigns.First());
-        _database.Received(1).SaveChanges();
+        await _database.Received(1).SaveChangesAsync();
     }
 }

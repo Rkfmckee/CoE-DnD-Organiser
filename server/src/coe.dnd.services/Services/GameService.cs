@@ -4,6 +4,7 @@ using coe.dnd.dal.Models;
 using coe.dnd.dal.Specifications.Games;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Unosquare.EntityFramework.Specification.Common.Extensions;
 
 namespace coe.dnd.services.Services;
@@ -19,64 +20,64 @@ public class GameService : IGameService
         _mapper = mapper;
     }
 
-    public bool GameExists(int id)
+    public async Task<bool> GameExistsAsync(int id)
     {
-        return _database.Get<Game>()
+        return await _database.Get<Game>()
             .Where(new GameByIdSpec(id))
-            .Any();
+            .AnyAsync();
     }
     
-    public GameDto GetGame(int id)
+    public async Task<GameDto> GetGameAsync(int id)
     {
-        return _mapper
-            .ProjectTo<GameDto>(GetGameQueryable(id))
-            .SingleOrDefault();
+        return await _mapper
+            .ProjectTo<GameDto>(GetGameQuery(id))
+            .SingleOrDefaultAsync();
     }
     
-    public IList<GameDto> GetGames(int? gameMasterId = null, int? campaignId = null)
+    public async Task<IList<GameDto>> GetGamesAsync(int? gameMasterId = null, int? campaignId = null)
     {
-        return _mapper
-            .ProjectTo<GameDto>(GetGamesQueryable(gameMasterId, campaignId))
-            .ToList();
+        return await _mapper
+            .ProjectTo<GameDto>(GetGamesQuery(gameMasterId, campaignId))
+            .ToListAsync();
     }
 
-    public void CreateGame(GameDto gameData)
+    public async Task CreateGameAsync(GameDto gameData)
     {
         var game = _mapper.Map<Game>(gameData);
-        game.Created = DateTime.Now;
+        game.Created = DateTime.UtcNow;
         
         _database.Add(game);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void UpdateGame(int id, GameDto gameData)
+    public async Task UpdateGameAsync(int id, GameDto gameData)
     {
-        var game = GetGameObject(id);
+        var game = await GetGameFromQueryAsync(id);
         
         _mapper.Map(gameData, game);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void DeleteGame(int id)
+    public async Task DeleteGameAsync(int id)
     {
-        var game = GetGameObject(id);
+        var game = await GetGameFromQueryAsync(id);
         
         _database.Delete(game);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    private IQueryable<Game> GetGameQueryable(int id)
+    private IQueryable<Game> GetGameQuery(int id)
     {
         return _database.Get<Game>()
             .Where(new GameByIdSpec(id));
     }
     
-    private Game GetGameObject(int id)
+    private async Task<Game> GetGameFromQueryAsync(int id)
     {
-        return GetGameQueryable(id).SingleOrDefault();
+        return await GetGameQuery(id).SingleOrDefaultAsync();
     }
     
-    private IQueryable<Game> GetGamesQueryable(int? gameMasterId = null, int? campaignId = null)
+    private IQueryable<Game> GetGamesQuery(int? gameMasterId = null, int? campaignId = null)
     {
         return _database.Get<Game>()
             .Where(new GameSearchSpec(gameMasterId, campaignId));

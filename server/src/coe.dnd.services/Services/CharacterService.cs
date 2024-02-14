@@ -43,7 +43,7 @@ public class CharacterService : ICharacterService
     public void CreateCharacter(CharacterDto characterData)
     {
         var character = _mapper.Map<Character>(characterData);
-        character.Created = DateTime.Now;
+        character.Created = DateTime.UtcNow;
         
         _database.Add(character);
         _database.SaveChanges();

@@ -22,9 +22,9 @@ public class GamesController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<GameViewModel>), StatusCodes.Status200OK)]
-    public IActionResult GetGames([FromQuery] int? gameMasterId, [FromQuery] int? campaignId)
+    public async Task<IActionResult> GetGames([FromQuery] int? gameMasterId, [FromQuery] int? campaignId)
     {
-        var gamesData = _gameService.GetGames(gameMasterId, campaignId);
+        var gamesData = await _gameService.GetGamesAsync(gameMasterId, campaignId);
         if (gamesData == null) return NotFound();
         
         return Ok(_mapper.Map<IList<GameViewModel>>(gamesData));
@@ -33,21 +33,21 @@ public class GamesController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GameViewModel), StatusCodes.Status200OK)]
-    public IActionResult GetGame(int id)
+    public async Task<IActionResult> GetGame(int id)
     {
-        if (!_gameService.GameExists(id)) return NotFound();
+        if (!(await _gameService.GameExistsAsync(id))) return NotFound();
 
-        var gameData = _gameService.GetGame(id);
+        var gameData = await _gameService.GetGameAsync(id);
         
         return Ok(_mapper.Map<GameViewModel>(gameData));
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(CreateGameViewModel), StatusCodes.Status201Created)]
-    public IActionResult CreateGame(CreateGameViewModel gameDetails)
+    public async Task<IActionResult> CreateGame(CreateGameViewModel gameDetails)
     {
         var gameData = _mapper.Map<GameDto>(gameDetails);
-        _gameService.CreateGame(gameData);
+        await _gameService.CreateGameAsync(gameData);
         
         return CreatedAtAction(nameof(CreateGame), null);
     }
@@ -55,12 +55,12 @@ public class GamesController : Controller
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult UpdateGame(int id, UpdateGameViewModel gameDetails)
+    public async Task<IActionResult> UpdateGame(int id, UpdateGameViewModel gameDetails)
     {
-        if (!_gameService.GameExists(id)) return NotFound();
+        if (!(await _gameService.GameExistsAsync(id))) return NotFound();
 
         var gameData = _mapper.Map<GameDto>(gameDetails);
-        _gameService.UpdateGame(id, gameData);
+        await _gameService.UpdateGameAsync(id, gameData);
         
         return Ok();
     }
@@ -68,11 +68,11 @@ public class GamesController : Controller
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public IActionResult DeleteGame(int id)
+    public async Task<IActionResult> DeleteGame(int id)
     {
-        if (!_gameService.GameExists(id)) return NotFound();
+        if (!(await _gameService.GameExistsAsync(id))) return NotFound();
         
-        _gameService.DeleteGame(id);
+        await _gameService.DeleteGameAsync(id);
         
         return NoContent();
     }

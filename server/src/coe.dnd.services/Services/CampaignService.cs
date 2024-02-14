@@ -4,6 +4,7 @@ using coe.dnd.dal.Models;
 using coe.dnd.dal.Specifications.Campaigns;
 using coe.dnd.services.DataTransferObjects;
 using coe.dnd.services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Unosquare.EntityFramework.Specification.Common.Extensions;
 
 namespace coe.dnd.services.Services;
@@ -19,64 +20,64 @@ public class CampaignService : ICampaignService
         _mapper = mapper;
     }
 
-    public bool CampaignExists(int id)
+    public async Task<bool> CampaignExistsAsync(int id)
     {
-        return _database.Get<Campaign>()
+        return await _database.Get<Campaign>()
             .Where(new CampaignByIdSpec(id))
-            .Any();
+            .AnyAsync();
     }
     
-    public CampaignDto GetCampaign(int id)
+    public async Task<CampaignDto> GetCampaignAsync(int id)
     {
-        return _mapper
-            .ProjectTo<CampaignDto>(GetCampaignQueryable(id))
-            .SingleOrDefault();
+        return await _mapper
+            .ProjectTo<CampaignDto>(GetCampaignQuery(id))
+            .SingleOrDefaultAsync();
     }
     
-    public IList<CampaignDto> GetCampaigns(string name = null, string theme = null, string writer = null)
+    public async Task<IList<CampaignDto>> GetCampaignsAsync(string name = null, string theme = null, string writer = null)
     {
-        return _mapper
-            .ProjectTo<CampaignDto>(GetCampaignsQueryable(name, theme, writer))
-            .ToList();
+        return await _mapper
+            .ProjectTo<CampaignDto>(GetCampaignsQuery(name, theme, writer))
+            .ToListAsync();
     }
 
-    public void CreateCampaign(CampaignDto campaignData)
+    public async Task CreateCampaignAsync(CampaignDto campaignData)
     {
         var campaign = _mapper.Map<Campaign>(campaignData);
-        campaign.Created = DateTime.Now;
+        campaign.Created = DateTime.UtcNow;
         
         _database.Add(campaign);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void UpdateCampaign(int id, CampaignDto campaignData)
+    public async Task UpdateCampaignAsync(int id, CampaignDto campaignData)
     {
-        var campaign = GetCampaignObject(id);
+        var campaign = await GetCampaignFromQueryAsync(id);
         
         _mapper.Map(campaignData, campaign);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
 
-    public void DeleteCampaign(int id)
+    public async Task DeleteCampaignAsync(int id)
     {
-        var campaign = GetCampaignObject(id);
+        var campaign = await GetCampaignFromQueryAsync(id);
         
         _database.Delete(campaign);
-        _database.SaveChanges();
+        await _database.SaveChangesAsync();
     }
     
-    private IQueryable<Campaign> GetCampaignQueryable(int id)
+    private IQueryable<Campaign> GetCampaignQuery(int id)
     {
         return _database.Get<Campaign>()
             .Where(new CampaignByIdSpec(id));
     }
     
-    private Campaign GetCampaignObject(int id)
+    private async Task<Campaign> GetCampaignFromQueryAsync(int id)
     {
-        return GetCampaignQueryable(id).SingleOrDefault();
+        return await GetCampaignQuery(id).SingleOrDefaultAsync();
     }
     
-    private IQueryable<Campaign> GetCampaignsQueryable(string name = null, string theme = null, string writer = null)
+    private IQueryable<Campaign> GetCampaignsQuery(string name = null, string theme = null, string writer = null)
     {
         return _database.Get<Campaign>()
             .Where(new CampaignSearchSpec(name, theme, writer));

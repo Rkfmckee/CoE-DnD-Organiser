@@ -4,10 +4,10 @@ namespace coe.dnd.services.Interfaces;
 
 public interface ICampaignService
 {
-    bool CampaignExists(int id);
-    CampaignDto GetCampaign(int id);
-    IList<CampaignDto> GetCampaigns(string name = null, string theme = null, string writer = null);
-    void CreateCampaign(CampaignDto campaignData);
-    void UpdateCampaign(int id, CampaignDto campaignData);
-    void DeleteCampaign(int id);
+    Task<bool> CampaignExistsAsync(int id);
+    Task<CampaignDto> GetCampaignAsync(int id);
+    Task<IList<CampaignDto>> GetCampaignsAsync(string name = null, string theme = null, string writer = null);
+    Task CreateCampaignAsync(CampaignDto campaignData);
+    Task UpdateCampaignAsync(int id, CampaignDto campaignData);
+    Task DeleteCampaignAsync(int id);
 }

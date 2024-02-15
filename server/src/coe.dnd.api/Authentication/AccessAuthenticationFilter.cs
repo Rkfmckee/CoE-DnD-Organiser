@@ -10,18 +10,20 @@ namespace coe.dnd.api.Authentication;
 public class AccessAuthenticationFilter: AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly IHttpContextAccessor _contextAccessor;
-    
-    public AccessAuthenticationFilter(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHttpContextAccessor accessor) 
+    private readonly IConfiguration _configuration;
+
+    public AccessAuthenticationFilter(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHttpContextAccessor accessor, IConfiguration configuration) 
         : base(options, logger, encoder, clock)
     {
         _contextAccessor = accessor;
+        _configuration = configuration;
     }
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var header = _contextAccessor.HttpContext?.Request.Headers["authorization"].ToString().Replace("Bearer ", string.Empty);
         var handler = new JwtSecurityTokenHandler();
-        var secretKey = Encoding.UTF8.GetBytes("JWTMySonTheDayYouWereBorn");
+        var secretKey = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtStrings:AccessToken"));
         
         var validation = new TokenValidationParameters
         {

@@ -18,7 +18,7 @@ public class CharacterProfile : Profile
                 o.PreCondition(src => src.PlayerId != null);
                 o.MapFrom(src => src.PlayerId);
             });
-        
+
         CreateMap<CharacterDto, GameCharacter>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.CharacterId, o => o.MapFrom(x => x.Id));

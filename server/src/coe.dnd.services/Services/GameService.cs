@@ -49,6 +49,14 @@ public class GameService : IGameService
         _database.Add(game);
         await _database.SaveChangesAsync();
     }
+    
+    public async Task AddCharacterToGameAsync(GameCharacterDto gameCharacterData)
+    {
+        var gameCharacter = _mapper.Map<GameCharacter>(gameCharacterData);
+        
+        _database.Add(gameCharacter);
+        await _database.SaveChangesAsync();
+    }
 
     public async Task UpdateGameAsync(int id, GameDto gameData)
     {

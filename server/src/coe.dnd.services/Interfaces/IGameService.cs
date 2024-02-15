@@ -8,6 +8,7 @@ public interface IGameService
     Task<GameDto>  GetGameAsync(int id);
     Task<IList<GameDto>> GetGamesAsync(int? gameMasterId = null, int? campaignId = null);
     Task CreateGameAsync(GameDto gameData);
+    Task AddCharacterToGameAsync(GameCharacterDto gameCharacterData);
     Task UpdateGameAsync(int id, GameDto gameData);
     Task DeleteGameAsync(int id);
 }

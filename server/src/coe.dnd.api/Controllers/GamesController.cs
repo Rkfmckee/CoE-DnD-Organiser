@@ -11,11 +11,13 @@ namespace coe.dnd.api.Controllers;
 public class GamesController : Controller
 {
     private readonly IGameService _gameService;
+    private readonly ICharacterService _characterService;
     private readonly IMapper _mapper;
 
-    public GamesController(IGameService gameService, IMapper mapper)
+    public GamesController(IGameService gameService, ICharacterService characterService, IMapper mapper)
     {
         _gameService = gameService;
+        _characterService = characterService;
         _mapper = mapper;
     }
     
@@ -48,6 +50,20 @@ public class GamesController : Controller
     {
         var gameData = _mapper.Map<GameDto>(gameDetails);
         await _gameService.CreateGameAsync(gameData);
+        
+        return CreatedAtAction(nameof(CreateGame), null);
+    }
+    
+    [HttpPost("add-character")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public async Task<IActionResult> AddCharacterToGame(CreateGameCharacterViewModel gameCharacterDetails)
+    {
+        if (!(await _gameService.GameExistsAsync(gameCharacterDetails.GameId))) return NotFound();
+        if (!(await _characterService.CharacterExistsAsync(gameCharacterDetails.CharacterId))) return NotFound();
+
+        var gameCharacterData = _mapper.Map<GameCharacterDto>(gameCharacterDetails);
+        await _gameService.AddCharacterToGameAsync(gameCharacterData);
         
         return CreatedAtAction(nameof(CreateGame), null);
     }

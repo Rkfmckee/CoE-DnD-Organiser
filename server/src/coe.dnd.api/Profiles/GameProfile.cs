@@ -12,9 +12,12 @@ public class GameProfile : Profile
         CreateMap<GameViewModel, GameDto>();
         CreateMap<CreateGameViewModel, GameDto>();
         CreateMap<UpdateGameViewModel, GameDto>().IgnoreAllNull();
+        CreateMap<CreateGameCharacterViewModel, GameCharacterDto>();
 
         CreateMap<GameDto, GameViewModel>();
         CreateMap<GameDto, CreateGameViewModel>();
         CreateMap<GameDto, UpdateGameViewModel>();
+        CreateMap<GameCharacterDto, CreateGameCharacterViewModel>();
+
     }
 }

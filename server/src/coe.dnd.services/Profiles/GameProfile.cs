@@ -8,14 +8,15 @@ public class GameProfile : Profile
 {
     public GameProfile()
     {
-        CreateMap<Game, GameDto>();
+        CreateMap<Game, GameDto>()
+            .ForMember(d => d.Characters, o => o.MapFrom(s => s.GameCharacters.Select(y => y.Character)));
 
         CreateMap<GameDto, Game>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.GameMasterId, o =>
             {
-                o.PreCondition(src => src.GameMasterId != null);
-                o.MapFrom(src => src.GameMasterId);
+                o.PreCondition(s => s.GameMasterId != null);
+                o.MapFrom(s => s.GameMasterId);
             })
             .ForMember(d => d.CampaignId, o =>
             {
@@ -26,5 +27,7 @@ public class GameProfile : Profile
         CreateMap<GameDto, GameCharacter>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.GameId, o => o.MapFrom(x => x.Id));
+
+        CreateMap<GameCharacterDto, GameCharacter>();
     }
 }

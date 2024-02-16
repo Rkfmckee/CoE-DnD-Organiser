@@ -21,16 +21,23 @@ public class UpdateCharacterValidator : AbstractValidator<UpdateCharacterViewMod
     
     public UpdateCharacterValidator()
     {
+        RuleFor(character => character)
+            .Must(character => !string.IsNullOrEmpty(character.Name) || 
+                              !string.IsNullOrEmpty(character.Race) || 
+                              !string.IsNullOrEmpty(character.ClassLevels))
+            .WithMessage("At least one value required")
+            .WithName("NoValue");
+        
         RuleFor(character => character.Name)
-            .NotEmpty()
-            .Length(NameLengthMinimumCharacters, NameLengthMaximumCharacters);
+            .Length(NameLengthMinimumCharacters, NameLengthMaximumCharacters)
+            .When(character => !string.IsNullOrEmpty(character.Name));
 
         RuleFor(character => character.Race)
-            .NotEmpty()
-            .Length(RaceLengthMinimumCharacters, RaceLengthMaximumCharacters);
+            .Length(RaceLengthMinimumCharacters, RaceLengthMaximumCharacters)
+            .When(character => !string.IsNullOrEmpty(character.Race));
         
         RuleFor(character => character.ClassLevels)
-            .NotEmpty()
-            .MinimumLength(ClassLengthMinimumCharacters);
+            .MinimumLength(ClassLengthMinimumCharacters)
+            .When(character => !string.IsNullOrEmpty(character.ClassLevels));
     }
 }

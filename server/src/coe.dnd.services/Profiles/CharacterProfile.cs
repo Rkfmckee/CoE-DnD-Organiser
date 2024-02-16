@@ -17,6 +17,21 @@ public class CharacterProfile : Profile
             {
                 o.PreCondition(src => src.PlayerId != null);
                 o.MapFrom(src => src.PlayerId);
+            })
+            .ForMember(d => d.Name, o =>
+            {
+                o.PreCondition(src => !string.IsNullOrEmpty(src.Name));
+                o.MapFrom(src => src.Name);
+            })
+            .ForMember(d => d.Race, o =>
+            {
+                o.PreCondition(src => !string.IsNullOrEmpty(src.Race));
+                o.MapFrom(src => src.Race);
+            })
+            .ForMember(d => d.ClassLevels, o =>
+            {
+                o.PreCondition(src => !string.IsNullOrEmpty(src.ClassLevels));
+                o.MapFrom(src => src.ClassLevels);
             });
 
         CreateMap<CharacterDto, GameCharacter>()

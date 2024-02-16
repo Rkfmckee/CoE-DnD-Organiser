@@ -22,7 +22,12 @@ public class GameProfile : Profile
             {
                 o.PreCondition(src => src.CampaignId != null);
                 o.MapFrom(src => src.CampaignId);
-            });;
+            })
+            .ForMember(d => d.Details, o =>
+            {
+                o.PreCondition(s => !string.IsNullOrEmpty(s.Details));
+                o.MapFrom(s => s.Details);
+            });
         
         CreateMap<GameDto, GameCharacter>()
             .ForMember(d => d.Id, o => o.Ignore())

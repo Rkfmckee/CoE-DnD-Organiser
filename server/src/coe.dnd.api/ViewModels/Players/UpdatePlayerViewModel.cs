@@ -17,14 +17,23 @@ public class UpdatePlayerValidator : AbstractValidator<UpdatePlayerViewModel>
     
     public UpdatePlayerValidator()
     {
+        RuleFor(player => player)
+            .Must(player => !string.IsNullOrEmpty(player.EmailAddress) ||
+                            !string.IsNullOrEmpty(player.Name) ||
+                            player.DateOfBirth != null ||
+                            !string.IsNullOrEmpty(player.Password))
+            .WithMessage("At least one value required")
+            .WithName("NoValue");
+        
         RuleFor(player => player.EmailAddress)
-            .EmailAddress();
+            .EmailAddress()
+            .When(player => !string.IsNullOrEmpty(player.EmailAddress));
 
         RuleFor(player => player.Password)
-            .NotEmpty()
             .Length(PasswordLengthMinimumCharacters, PasswordLengthMaximumCharacters)
             .Matches(@"[A-Z]+").WithMessage("'{PropertyName}' must contain at least one uppercase letter.")
             .Matches(@"[a-z]+").WithMessage("'{PropertyName}' must contain at least one lowercase letter.")
-            .Matches(@"[0-9]+").WithMessage("'{PropertyName}' must contain at least one number.");
+            .Matches(@"[0-9]+").WithMessage("'{PropertyName}' must contain at least one number.")
+            .When(player => !string.IsNullOrEmpty(player.Password));
     }
 }

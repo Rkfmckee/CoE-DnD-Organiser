@@ -16,6 +16,11 @@ public class GameMasterProfile : Profile
             {
                 o.PreCondition(src => src.PlayerId != null);
                 o.MapFrom(src => src.PlayerId);
+            })
+            .ForMember(d => d.PlanningNotes, o =>
+            {
+                o.PreCondition(src => !string.IsNullOrEmpty(src.PlanningNotes));
+                o.MapFrom(src => src.PlanningNotes);
             });
     }
 }

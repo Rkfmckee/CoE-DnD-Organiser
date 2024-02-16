@@ -18,7 +18,10 @@ public class UpdateCampaignValidator : AbstractValidator<UpdateCampaignViewModel
     public UpdateCampaignValidator()
     {
         RuleFor(campaign => campaign)
-            .Must(campaign => campaign.Name != null || campaign.Theme != null || campaign.Details != null || campaign.Writer != null)
+            .Must(campaign => !string.IsNullOrEmpty(campaign.Name) || 
+                              !string.IsNullOrEmpty(campaign.Theme) || 
+                              !string.IsNullOrEmpty(campaign.Details) || 
+                              !string.IsNullOrEmpty(campaign.Writer))
             .WithMessage("At least one value required")
             .WithName("NoValue");
         

@@ -17,14 +17,13 @@ public class UpdateCampaignValidator : AbstractValidator<UpdateCampaignViewModel
     
     public UpdateCampaignValidator()
     {
-        RuleFor(campaign => campaign.Name)
-            .NotEmpty()
-            .Length(NameLengthMinimumCharacters, NameLengthMaximumCharacters);
-
-        RuleFor(campaign => campaign.Theme)
-            .NotEmpty();
+        RuleFor(campaign => campaign)
+            .Must(campaign => campaign.Name != null || campaign.Theme != null || campaign.Details != null || campaign.Writer != null)
+            .WithMessage("At least one value required")
+            .WithName("NoValue");
         
-        RuleFor(campaign => campaign.Writer)
-            .NotEmpty();
+        RuleFor(campaign => campaign.Name)
+            .Length(NameLengthMinimumCharacters, NameLengthMaximumCharacters)
+            .When(campaign => !string.IsNullOrEmpty(campaign.Name));
     }
 }

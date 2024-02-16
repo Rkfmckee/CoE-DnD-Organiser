@@ -146,7 +146,7 @@ public class CampaignControllerTests
     {
         var authenticationRequest = new AuthenticationRequestViewModel
         {
-            Email = $"player1@dnd.com",
+            Email = "player1@dnd.com",
             Password = "Password1"
         };
         

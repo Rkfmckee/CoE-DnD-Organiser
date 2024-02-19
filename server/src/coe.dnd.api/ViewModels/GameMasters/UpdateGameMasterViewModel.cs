@@ -10,9 +10,6 @@ public class UpdateGameMasterViewModel
 
 public class UpdateGameMasterValidator : AbstractValidator<UpdateGameMasterViewModel>
 {
-    private const int NameLengthMinimumCharacters = CreateCampaignValidator.NameLengthMinimumCharacters;
-    private const int NameLengthMaximumCharacters = CreateCampaignValidator.NameLengthMaximumCharacters;
-    
     public UpdateGameMasterValidator()
     {
         RuleFor(gameMaster => gameMaster)

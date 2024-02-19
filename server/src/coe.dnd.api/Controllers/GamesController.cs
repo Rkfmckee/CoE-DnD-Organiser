@@ -65,7 +65,7 @@ public class GamesController : Controller
         var gameCharacterData = _mapper.Map<GameCharacterDto>(gameCharacterDetails);
         await _gameService.AddCharacterToGameAsync(gameCharacterData);
         
-        return CreatedAtAction(nameof(CreateGame), null);
+        return CreatedAtAction(nameof(AddCharacterToGame), null);
     }
 
     [HttpPut("{id}")]

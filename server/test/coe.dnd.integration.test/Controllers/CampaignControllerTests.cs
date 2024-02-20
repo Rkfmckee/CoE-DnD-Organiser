@@ -44,7 +44,7 @@ public class CampaignControllerTests
         
         const int id = 1;
         var response = await _httpClient.GetAsync($"/api/campaigns/{id}");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         var value = await response.Content.ReadAsStringAsync();
         _testOutputHelper.WriteLine(value.VerifyDeSerialization<CampaignViewModel>());

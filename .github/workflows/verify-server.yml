@@ -1,0 +1,26 @@
+name: Verify Server
+
+on:
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - "server/**"
+
+defaults:
+  run:
+    working-directory: ./server
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎 Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: 🍗 Restore nuget
+        run: dotnet restore && dotnet build
+      - name: Test with dotnet
+        run: |
+          dotnet test --no-restore -c Release
